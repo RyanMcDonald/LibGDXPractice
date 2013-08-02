@@ -9,10 +9,10 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "My Cool Game";
 		cfg.useGL20 = false;
-		cfg.width = 1280;
-		cfg.height = 720;
+		cfg.width = 512;
+		cfg.height = 512;
 		
-		TexturePacker2.process("images", "../my-cool-game-android/assets/images/textures", "textures.pack");
+		TexturePacker2.process("images/", "../my-cool-game-android/assets/images/textures", "textures.pack");
 		
 		new LwjglApplication(new MyCoolGame(), cfg);
 	}

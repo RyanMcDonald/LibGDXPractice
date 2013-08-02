@@ -47,6 +47,8 @@ public class WorldRenderer {
 		this.camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
 		this.spriteBatch = spriteBatch;
 		this.atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
+		
+		loadTextures();
 	}
 	
 	public void render() {
@@ -66,25 +68,9 @@ public class WorldRenderer {
 		renderObjects();
 	}
 	
-	private void renderBackground () {
+	private void loadTextures() {
 		backgroundRegion = new TextureRegion(new Texture(Gdx.files.internal(world.getLevel().getBackgroundFilename())));
 		
-		spriteBatch.disableBlending();
-		spriteBatch.begin();
-		spriteBatch.draw(backgroundRegion, Gdx.graphics.getWidth() / 2 - backgroundRegion.getRegionWidth() / 2, Gdx.graphics.getHeight() / 2 - backgroundRegion.getRegionHeight() / 2);
-		spriteBatch.end();
-	}
-	
-	private void renderObjects() {
-		spriteBatch.enableBlending();
-		spriteBatch.begin();
-		
-		renderPlayer();
-		
-		spriteBatch.end();
-	}
-	
-	private void renderPlayer() {
 		playerIdleNorth = atlas.findRegion("player-idle-north");
 		playerIdleNortheast = atlas.findRegion("player-idle-northeast");
 		playerIdleEast = atlas.findRegion("player-idle-east");
@@ -94,14 +80,14 @@ public class WorldRenderer {
 		playerIdleWest = atlas.findRegion("player-idle-west");
 		playerIdleNorthwest = atlas.findRegion("player-idle-northwest");
 
-		TextureRegion[] walkNorthFrames = new TextureRegion[6];
-		TextureRegion[] walkNortheastFrames = new TextureRegion[6];
-		TextureRegion[] walkEastFrames = new TextureRegion[6];
-		TextureRegion[] walkSoutheastFrames = new TextureRegion[6];
-		TextureRegion[] walkSouthFrames = new TextureRegion[6];
-		TextureRegion[] walkSouthwestFrames = new TextureRegion[6];
-		TextureRegion[] walkWestFrames = new TextureRegion[6];
-		TextureRegion[] walkNorthwestFrames = new TextureRegion[6];
+		TextureRegion[] walkNorthFrames = new TextureRegion[3];
+		TextureRegion[] walkNortheastFrames = new TextureRegion[3];
+		TextureRegion[] walkEastFrames = new TextureRegion[3];
+		TextureRegion[] walkSoutheastFrames = new TextureRegion[3];
+		TextureRegion[] walkSouthFrames = new TextureRegion[3];
+		TextureRegion[] walkSouthwestFrames = new TextureRegion[3];
+		TextureRegion[] walkWestFrames = new TextureRegion[3];
+		TextureRegion[] walkNorthwestFrames = new TextureRegion[3];
 		
 		// We want the idle images to be the first frame of the animations
 		walkNorthFrames[0] = atlas.findRegion("player-idle-north");
@@ -113,7 +99,7 @@ public class WorldRenderer {
 		walkWestFrames[0] = atlas.findRegion("player-idle-west");
 		walkNorthwestFrames[0] = atlas.findRegion("player-idle-northwest");
 		
-		for (int i = 1; i < 6; i++) {
+		for (int i = 1; i < 3; i++) {
 			walkNorthFrames[i] = atlas.findRegion("player-walking-north-" + i);
 			walkNortheastFrames[i] = atlas.findRegion("player-walking-northeast-" + i);
 			walkEastFrames[i] = atlas.findRegion("player-walking-east-" + i);
@@ -132,6 +118,25 @@ public class WorldRenderer {
 		walkSouthwestAnimation = new Animation(RUNNING_FRAME_DURATION, walkSouthwestFrames);
 		walkWestAnimation = new Animation(RUNNING_FRAME_DURATION, walkWestFrames);
 		walkNorthwestAnimation = new Animation(RUNNING_FRAME_DURATION, walkNorthwestFrames);
+	}
+	
+	private void renderBackground () {
+		spriteBatch.disableBlending();
+		spriteBatch.begin();
+		spriteBatch.draw(backgroundRegion, Gdx.graphics.getWidth() / 2 - backgroundRegion.getRegionWidth() / 2, Gdx.graphics.getHeight() / 2 - backgroundRegion.getRegionHeight() / 2);
+		spriteBatch.end();
+	}
+	
+	private void renderObjects() {
+		spriteBatch.enableBlending();
+		spriteBatch.begin();
+		
+		renderPlayer();
+		
+		spriteBatch.end();
+	}
+	
+	private void renderPlayer() {
 		
 		Player player = world.getPlayer();
 		TextureRegion playerFrame = null;
