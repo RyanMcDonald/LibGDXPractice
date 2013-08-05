@@ -1,12 +1,13 @@
 package com.me.mycoolgame.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 
 public class World {
 
-	Player player;
-	Level level;
+	private Player player;
+	private TiledMap map;
 	
 	public World() {
 		createDemoWorld();
@@ -14,19 +15,19 @@ public class World {
 	
 	private void createDemoWorld() {
 		player = new Player(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
-		level = new Level();
+		map = null;
 	}
 	
 	public Player getPlayer() {
 		return player;
 	}
 
-	public Level getLevel() {
-		return level;
+	public TiledMap getMap() {
+		return map;
 	}
 
-	public void setLevel(Level level) {
-		this.level = level;
+	public void setMap(TiledMap map) {
+		this.map = map;
 	}
 	
 }

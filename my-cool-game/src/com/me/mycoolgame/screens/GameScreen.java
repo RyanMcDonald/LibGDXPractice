@@ -6,7 +6,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.me.mycoolgame.controller.PlayerController;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.view.WorldRenderer;
@@ -19,6 +24,13 @@ public class GameScreen implements Screen, InputProcessor {
 	private World world;
 	private WorldRenderer renderer;
 	private PlayerController controller;
+	
+	// The stage is our HUD
+	private Stage stage;
+	private Skin skin;
+	private Touchpad touchpad;
+	private TextureRegion touchpadBase;
+	private TextureRegion touchpadKnob;
 	
 	public GameScreen(Game game) {
 		this.game = game;
@@ -108,8 +120,15 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		if (touchpad.isTouched()) {
+	         world.getPlayer().getPosition().add(touchpad.getKnobPercentX() * world.getPlayer().getSpeed(), touchpad.getKnobPercentY() * world.getPlayer().getSpeed());
+		}
+		
 		controller.update(delta);
 		renderer.render();
+		
+		stage.act();
+		stage.draw();
 	}
 
 	@Override
@@ -123,7 +142,17 @@ public class GameScreen implements Screen, InputProcessor {
 		world = new World();
 		renderer = new WorldRenderer(world, spriteBatch);
 		controller = new PlayerController(world);
+		
+		stage = new Stage();
+		skin = new Skin();
+		skin.add("touchpadBase", new Texture("images/touchpad_base.png"));
+		skin.add("touchpadKnob", new Texture("images/touchpad_knob.png"));
+		touchpad = new Touchpad(10f, new Touchpad.TouchpadStyle(skin.getDrawable("touchpadBase"), skin.getDrawable("touchpadKnob")));
+		touchpad.setBounds(25, 25, 150, 150);
+		stage.addActor(touchpad);
+	      
 		Gdx.input.setInputProcessor(this);
+//		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
@@ -146,6 +175,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void dispose() {
 		Gdx.input.setInputProcessor(null);
+		spriteBatch.dispose();
 	}
 
 }

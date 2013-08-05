@@ -13,12 +13,12 @@ public class Player {
 		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 	}
 	
-	private float width = 1f;
-	private float height = 1f;
+	private float width = 32f;
+	private float height = 32f;
 	
 	private Vector2 position = new Vector2();
 	private Vector2 velocity = new Vector2();
-	private float speed = 50f;
+	private float speed = 80f;
 	private Rectangle bounds = new Rectangle();
 	private State state = State.IDLE;
 	private Direction facingDirection = Direction.NORTH;

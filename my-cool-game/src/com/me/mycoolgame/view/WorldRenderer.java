@@ -7,7 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Pool;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.State;
 import com.me.mycoolgame.model.World;
@@ -20,7 +26,8 @@ public class WorldRenderer {
 	private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
 	
-	private TextureRegion backgroundRegion;
+	private TiledMap map;
+	private OrthogonalTiledMapRenderer renderer;
 	
 	private TextureAtlas atlas;
 	private TextureRegion playerIdleNorth;
@@ -43,8 +50,10 @@ public class WorldRenderer {
 	
 	public WorldRenderer(World world, SpriteBatch spriteBatch) {
 		this.world = world;
-		this.camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		this.camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+		this.camera = new OrthographicCamera();
+		camera.setToOrtho(false, 500, 300);
+		camera.update();
+		
 		this.spriteBatch = spriteBatch;
 		this.atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
 		
@@ -53,23 +62,20 @@ public class WorldRenderer {
 	
 	public void render() {
 		Vector2 playerPosition = world.getPlayer().getPosition();
-		
-		if (playerPosition.x != camera.position.x) {
-			camera.position.x = playerPosition.x;
-		}
-		
-		if (playerPosition.y != camera.position.y) {
-			camera.position.y = playerPosition.y;
-		}
+		camera.position.x = playerPosition.x;
+		camera.position.y = playerPosition.y;
 		
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
+		
 		renderBackground();
 		renderObjects();
 	}
 	
 	private void loadTextures() {
-		backgroundRegion = new TextureRegion(new Texture(Gdx.files.internal(world.getLevel().getBackgroundFilename())));
+		map = new TmxMapLoader().load("images/tilesets/nature/nature.tmx");
+		world.setMap(map);
+		renderer = new OrthogonalTiledMapRenderer(map, 1f);
 		
 		playerIdleNorth = atlas.findRegion("player-idle-north");
 		playerIdleNortheast = atlas.findRegion("player-idle-northeast");
@@ -121,10 +127,14 @@ public class WorldRenderer {
 	}
 	
 	private void renderBackground () {
-		spriteBatch.disableBlending();
-		spriteBatch.begin();
-		spriteBatch.draw(backgroundRegion, Gdx.graphics.getWidth() / 2 - backgroundRegion.getRegionWidth() / 2, Gdx.graphics.getHeight() / 2 - backgroundRegion.getRegionHeight() / 2);
-		spriteBatch.end();
+//		spriteBatch.disableBlending();
+//		spriteBatch.begin();
+//		spriteBatch.draw(backgroundRegion, Gdx.graphics.getWidth() / 2 - backgroundRegion.getRegionWidth() / 2, Gdx.graphics.getHeight() / 2 - backgroundRegion.getRegionHeight() / 2);
+//		spriteBatch.end();
+		
+		// set the tile map renderer view based on what the camera sees and render the map
+		renderer.setView(camera);
+		renderer.render();
 	}
 	
 	private void renderObjects() {
