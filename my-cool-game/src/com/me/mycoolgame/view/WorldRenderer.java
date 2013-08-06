@@ -205,7 +205,6 @@ public class WorldRenderer {
 		}
 		
 		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
-		
 	}
 	
 	private void keepCameraInBounds() {

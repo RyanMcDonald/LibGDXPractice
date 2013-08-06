@@ -1,6 +1,5 @@
 package com.me.mycoolgame.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 
@@ -14,7 +13,7 @@ public class World {
 	}
 	
 	private void createDemoWorld() {
-		player = new Player(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
+		player = new Player(new Vector2(256, 352));
 		map = null;
 	}
 	

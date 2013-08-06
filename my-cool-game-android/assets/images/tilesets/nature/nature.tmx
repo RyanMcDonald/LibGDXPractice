@@ -21,9 +21,9 @@
    eJzt1DcOAjEQQFFfnSxYcs45Z9FAB0fjF66MPYgREg1fes3OyN1OZIzJo4AiSigbfxVUUUMdDTTRQtvuSDO3DrrooY8BhhhhbHekmdsEU8wwxwJLrLC2O9LMbYMtdtjjgCNOONsdaebr4vl2xS2wL81C3d/MHh++9++3xRBHAkmkkEZG+V4WOUTm9d/XJN0FTdJd0CTdBU3SXdAWugvfTLoL2p6I1Eds
   </data>
  </layer>
- <objectgroup name="Collision" width="20" height="20" visible="0">
-  <object x="417" y="129" width="126" height="62"/>
-  <object x="481" y="543" width="126" height="65"/>
-  <object x="0" y="161" width="126" height="62"/>
+ <objectgroup name="Collision" width="20" height="20">
+  <object x="432" y="143" width="97" height="36"/>
+  <object x="15" y="173" width="98" height="38"/>
+  <object x="494" y="555" width="98" height="37"/>
  </objectgroup>
 </map>

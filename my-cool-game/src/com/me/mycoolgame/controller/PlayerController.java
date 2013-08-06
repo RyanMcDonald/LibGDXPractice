@@ -271,7 +271,7 @@ public class PlayerController {
 		// his feet won't be able to walk into the collidable area
 		playerRect.set(player.getPosition().x, player.getPosition().y, player.getWidth(), player.getHeight() / 2);
 		
-		// TODO: Possibly move this outside of 
+		// TODO: Possibly move this outside of this method so it's not instantiated on every frame
 		MapObjects objects = world.getMap().getLayers().get("Collision").getObjects();
 		for (int i = 0; i < objects.getCount(); i++) {
 			RectangleMapObject objectRect = (RectangleMapObject) objects.get(i);
@@ -291,6 +291,8 @@ public class PlayerController {
 			if(playerRect.overlaps(rect)) {
 				player.getVelocity().y = 0;
 			}
+			
+			playerRect.y = player.getPosition().y;
 		}
 		
 		// Unscale the velocity by the inverse delta time
