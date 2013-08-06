@@ -3,6 +3,8 @@ package com.me.mycoolgame.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.MathUtils;
@@ -83,7 +85,8 @@ public class PlayerController {
 		processInput(delta);
 
 		if (player.getState().equals(Player.State.WALKING)) {
-			checkCollisionsWithLayer(delta);
+//			checkCollisionsWithLayer("Foreground", delta);
+			checkCollisionsWithObjects(delta);
 			preventOutOfBounds();
 		}
 		
@@ -164,7 +167,7 @@ public class PlayerController {
 		}
 	}
 	
-	private void checkCollisionsWithLayer(float delta) {
+	private void checkCollisionsWithLayer(String layerName, float delta) {
 		// Get the player's velocity in terms of frame units, so that we know how far they will have gone.
 		player.getVelocity().scl(delta);
 		
@@ -191,7 +194,7 @@ public class PlayerController {
 		endY = (int) (player.getPosition().y + player.getHeight());
 		
 		// Get the possible tiles the player could collide with
-		getTiles(startX, startY, endX, endY, tiles);
+		getTiles(layerName, startX, startY, endX, endY, tiles);
 		
 		playerRect.x += player.getVelocity().x;
 		for(Rectangle tile: tiles) {
@@ -215,7 +218,7 @@ public class PlayerController {
 		endX = (int) (player.getPosition().x + player.getWidth());
 		
 		// Get the possible tiles the player could collide with
-		getTiles(startX, startY, endX, endY, tiles);
+		getTiles(layerName, startX, startY, endX, endY, tiles);
 		
 		playerRect.y += player.getVelocity().y;
 		for(Rectangle tile: tiles) {
@@ -232,9 +235,9 @@ public class PlayerController {
 		player.getVelocity().scl(1/delta);
 	}
 	
-	private void getTiles(int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
+	private void getTiles(String layerName, int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
 		// Get the "Foreground" layer, consisting of all the tiles marked as foreground
-		TiledMapTileLayer layer = (TiledMapTileLayer) world.getMap().getLayers().get("Foreground");
+		TiledMapTileLayer layer = (TiledMapTileLayer) world.getMap().getLayers().get(layerName);
 		
 		rectPool.freeAll(tiles);
 		tiles.clear();
@@ -251,6 +254,47 @@ public class PlayerController {
 			}
 			
 		}
+	}
+	
+	/**
+	 * Checks if the player would collide with any objects in the Collision layer of the Tiled map, and
+	 * adjusts their position accordingly.
+	 * @param delta
+	 */
+	private void checkCollisionsWithObjects(float delta) {
+		// Get the player's velocity in terms of frame units, so that we know how far they will have gone.
+		player.getVelocity().scl(delta);
+		
+		Rectangle playerRect = new Rectangle();
+		
+		// We want the player's bounding box to only be his lower half, so that the collision looks more realistic since only
+		// his feet won't be able to walk into the collidable area
+		playerRect.set(player.getPosition().x, player.getPosition().y, player.getWidth(), player.getHeight() / 2);
+		
+		// TODO: Possibly move this outside of 
+		MapObjects objects = world.getMap().getLayers().get("Collision").getObjects();
+		for (int i = 0; i < objects.getCount(); i++) {
+			RectangleMapObject objectRect = (RectangleMapObject) objects.get(i);
+			Rectangle rect = objectRect.getRectangle();
+			
+			// If the player will collide with an object in the next x position calculation, set x velocity to 0.
+			playerRect.x += player.getVelocity().x;
+			if(playerRect.overlaps(rect)) {
+				player.getVelocity().x = 0;
+			}
+			
+			// Reset the x position of the playerRect so we can use it in the y-axis collision calculation
+			playerRect.x = player.getPosition().x;
+			
+			// If the player will collide with an object in the next y position calculation, set y velocity to 0.
+			playerRect.y += player.getVelocity().y;
+			if(playerRect.overlaps(rect)) {
+				player.getVelocity().y = 0;
+			}
+		}
+		
+		// Unscale the velocity by the inverse delta time
+		player.getVelocity().scl(1/delta);
 	}
 	
 }
