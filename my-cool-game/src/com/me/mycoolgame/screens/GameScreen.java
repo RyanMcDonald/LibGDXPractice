@@ -1,13 +1,16 @@
 package com.me.mycoolgame.screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -26,7 +29,6 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	// The stage is our HUD
 	private Stage stage;
-	private Skin skin;
 	private Touchpad touchpad;
 	
 	public GameScreen(Game game) {
@@ -115,8 +117,12 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		if (touchpad.isTouched()) {
-	         world.getPlayer().getPosition().add(touchpad.getKnobPercentX() * world.getPlayer().getSpeed(), touchpad.getKnobPercentY() * world.getPlayer().getSpeed());
+		if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS) {
+			if (touchpad.isTouched()) {
+				controller.touchpadPressed(touchpad);
+			} else {
+				controller.touchpadReleased();
+			}
 		}
 		
 		controller.update(delta);
@@ -137,17 +143,23 @@ public class GameScreen implements Screen, InputProcessor {
 		world = new World();
 		renderer = new WorldRenderer(world, spriteBatch);
 		controller = new PlayerController(world);
-		
 		stage = new Stage();
-		skin = new Skin();
-		skin.add("touchpadBase", new Texture("images/touchpad_base.png"));
-		skin.add("touchpadKnob", new Texture("images/touchpad_knob.png"));
-		touchpad = new Touchpad(10f, new Touchpad.TouchpadStyle(skin.getDrawable("touchpadBase"), skin.getDrawable("touchpadKnob")));
-		touchpad.setBounds(25, 25, 150, 150);
-		stage.addActor(touchpad);
-	      
-		Gdx.input.setInputProcessor(this);
-//		Gdx.input.setInputProcessor(stage);
+		
+		// Only render the touchpad if they're running on mobile
+		if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS) {
+			
+			Skin skin = new Skin();
+			skin.add("touchpadBase", new Texture("images/touchpad_base.png"));
+			skin.add("touchpadKnob", new Texture("images/touchpad_knob.png"));
+			
+			touchpad = new Touchpad(10f, new Touchpad.TouchpadStyle(skin.getDrawable("touchpadBase"), skin.getDrawable("touchpadKnob")));
+			touchpad.setBounds(25, 25, 300, 300);
+			
+			stage.addActor(touchpad);
+		}
+
+		InputMultiplexer multiplexer = new InputMultiplexer(stage, this);
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 
 	@Override

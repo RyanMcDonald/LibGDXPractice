@@ -3,6 +3,8 @@ package com.me.mycoolgame.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.me.mycoolgame.model.Player;
@@ -35,7 +38,7 @@ public class PlayerController {
 	};
 	
 	// We use this for optimization to avoid garbage collection overhead. Otherwise we would
-	// have to allocate a rectangle on each frame when checking collisions.
+	// have to allocate a rectangle on each frame when checking collisions with a layer.
 	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
 		@Override
 		protected Rectangle newObject () {
@@ -80,9 +83,53 @@ public class PlayerController {
 		keys.put(Keys.LEFT, false);
 	}
 	
+	public void touchpadPressed(Touchpad touchpad) {
+		float touchpadX = touchpad.getKnobPercentX();
+		float touchpadY = touchpad.getKnobPercentY();
+		
+		float newXVelocity = touchpadX * world.getPlayer().getSpeed();
+		float newYVelocity = touchpadY * world.getPlayer().getSpeed();
+		Vector2 newVelocity = new Vector2(newXVelocity, newYVelocity);
+		
+		// Calculate what direction the player should be facing based on the touchpad orientation. Default to North.
+		Direction playerDirection = Player.Direction.NORTH;
+		
+		if (touchpadX != 0 && touchpadY > 0) {
+			if (touchpadX >= -0.5 && touchpadX <= 0.5) {
+				playerDirection = Player.Direction.NORTH;
+			} else if (touchpadX > 0.5 && touchpadY > 0.5) {
+				playerDirection = Player.Direction.NORTHEAST;
+			} else if (touchpadX > 0 && touchpadY <= 0.5) {
+				playerDirection = Player.Direction.EAST;
+			} else if (touchpadX < -0.5 && touchpadY > 0.5) {
+				playerDirection = Player.Direction.NORTHWEST;
+			} else if (touchpadX < 0 && touchpadY <= 0.5) {
+				playerDirection = Player.Direction.WEST;
+			}
+		} else if (touchpadX != 0 && touchpadY < 0) {
+			if (touchpadX >= -0.5 && touchpadX <= 0.5) {
+				playerDirection = Player.Direction.SOUTH;
+			} else if (touchpadX > 0.5 && touchpadY < -0.5) {
+				playerDirection = Player.Direction.SOUTHEAST;
+			} else if (touchpadX > 0 && touchpadY >= -0.5) {
+				playerDirection = Player.Direction.EAST;
+			} else if (touchpadX < -0.5 && touchpadY < -0.5) {
+				playerDirection = Player.Direction.SOUTHWEST;
+			} else if (touchpadX < 0 && touchpadY >= -0.5) {
+				playerDirection = Player.Direction.WEST;
+			}
+		}
+		
+		updatePlayerMovingState(playerDirection, Player.State.WALKING, newVelocity);
+	}
+	
+	public void touchpadReleased() {
+		updatePlayerMovingState(player.getFacingDirection(), Player.State.IDLE, new Vector2(0, 0));
+	}
+	
 	public void update(float delta) {
 		// Process the input and set the player's states
-		processInput(delta);
+		processKeyInput(delta);
 
 		if (player.getState().equals(Player.State.WALKING)) {
 //			checkCollisionsWithLayer("Foreground", delta);
@@ -91,43 +138,48 @@ public class PlayerController {
 		}
 		
 		player.update(delta);
-		
-		
 	}
 	
-	private void processInput(float delta) {
-		// If they are only pressing UP
-		if (keys.get(Keys.UP) && !keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
-			updatePlayerMovingState(Player.Direction.NORTH, Player.State.WALKING, new Vector2(0, player.getSpeed()));
+	/**
+	 * Checks which keyboard keys are pressed and sets the player's state accordingly. Not used for the mobile platforms.
+	 * @param delta
+	 */
+	private void processKeyInput(float delta) {
+		if (Gdx.app.getType() != ApplicationType.Android && Gdx.app.getType() != ApplicationType.iOS) {
 			
-		} else if (keys.get(Keys.UP) && keys.get(Keys.RIGHT)) {
-			updatePlayerMovingState(Player.Direction.NORTHEAST, Player.State.WALKING, new Vector2(player.getSpeed(), player.getSpeed()));
+			// If they are only pressing UP
+			if (keys.get(Keys.UP) && !keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
+				updatePlayerMovingState(Player.Direction.NORTH, Player.State.WALKING, new Vector2(0, player.getSpeed()));
+				
+			} else if (keys.get(Keys.UP) && keys.get(Keys.RIGHT)) {
+				updatePlayerMovingState(Player.Direction.NORTHEAST, Player.State.WALKING, new Vector2(player.getSpeed(), player.getSpeed()));
+				
+			// If they are only pressing RIGHT
+			} else if (keys.get(Keys.RIGHT) && !keys.get(Keys.UP) && !keys.get(Keys.DOWN)) {
+				updatePlayerMovingState(Player.Direction.EAST, Player.State.WALKING, new Vector2(player.getSpeed(), 0));
+				
+			} else if (keys.get(Keys.RIGHT) && keys.get(Keys.DOWN)) {
+				updatePlayerMovingState(Player.Direction.SOUTHEAST, Player.State.WALKING, new Vector2(player.getSpeed(), -player.getSpeed()));
+				
+			// If they are only pressing DOWN
+			} else if (keys.get(Keys.DOWN) && !keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
+				updatePlayerMovingState(Player.Direction.SOUTH, Player.State.WALKING, new Vector2(0, -player.getSpeed()));
+				
+			} else if (keys.get(Keys.DOWN) && keys.get(Keys.LEFT)) {
+				updatePlayerMovingState(Player.Direction.SOUTHWEST, Player.State.WALKING, new Vector2(-player.getSpeed(), -player.getSpeed()));
+				
+			// If they are only pressing LEFT
+			} else if (keys.get(Keys.LEFT) && !keys.get(Keys.UP) && !keys.get(Keys.DOWN)) {
+				updatePlayerMovingState(Player.Direction.WEST, Player.State.WALKING, new Vector2(-player.getSpeed(), 0));
+				
+			} else if (keys.get(Keys.LEFT) && keys.get(Keys.UP)) {
+				updatePlayerMovingState(Player.Direction.NORTHWEST, Player.State.WALKING, new Vector2(-player.getSpeed(), player.getSpeed()));
+				
+			} else {
+				updatePlayerMovingState(player.getFacingDirection(), Player.State.IDLE, new Vector2(0, 0));
+			}
 			
-		// If they are only pressing RIGHT
-		} else if (keys.get(Keys.RIGHT) && !keys.get(Keys.UP) && !keys.get(Keys.DOWN)) {
-			updatePlayerMovingState(Player.Direction.EAST, Player.State.WALKING, new Vector2(player.getSpeed(), 0));
-			
-		} else if (keys.get(Keys.RIGHT) && keys.get(Keys.DOWN)) {
-			updatePlayerMovingState(Player.Direction.SOUTHEAST, Player.State.WALKING, new Vector2(player.getSpeed(), -player.getSpeed()));
-			
-		// If they are only pressing DOWN
-		} else if (keys.get(Keys.DOWN) && !keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
-			updatePlayerMovingState(Player.Direction.SOUTH, Player.State.WALKING, new Vector2(0, -player.getSpeed()));
-			
-		} else if (keys.get(Keys.DOWN) && keys.get(Keys.LEFT)) {
-			updatePlayerMovingState(Player.Direction.SOUTHWEST, Player.State.WALKING, new Vector2(-player.getSpeed(), -player.getSpeed()));
-			
-		// If they are only pressing LEFT
-		} else if (keys.get(Keys.LEFT) && !keys.get(Keys.UP) && !keys.get(Keys.DOWN)) {
-			updatePlayerMovingState(Player.Direction.WEST, Player.State.WALKING, new Vector2(-player.getSpeed(), 0));
-			
-		} else if (keys.get(Keys.LEFT) && keys.get(Keys.UP)) {
-			updatePlayerMovingState(Player.Direction.NORTHWEST, Player.State.WALKING, new Vector2(-player.getSpeed(), player.getSpeed()));
-			
-		} else {
-			updatePlayerMovingState(player.getFacingDirection(), Player.State.IDLE, new Vector2(0, 0));
 		}
-
 	}
 	
 	private void updatePlayerMovingState(Direction direction, State state, Vector2 velocity) {
