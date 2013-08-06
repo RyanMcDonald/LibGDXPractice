@@ -125,11 +125,6 @@ public class PlayerController {
 			updatePlayerMovingState(player.getFacingDirection(), Player.State.IDLE, new Vector2(0, 0));
 		}
 
-		// TODO: WHY DOESN'T THIS WORK WHEN WE PUT IT IN THE UPDATE METHOD?!
-//		if (player.getState().equals(Player.State.WALKING)) {
-//			checkCollisionsWithLayer(delta);
-//		}
-
 	}
 	
 	private void updatePlayerMovingState(Direction direction, State state, Vector2 velocity) {
@@ -142,8 +137,15 @@ public class PlayerController {
 		float posX = player.getPosition().x;
 		float posY = player.getPosition().y;
 		
-		float mapWidth = 640;
-		float mapHeight = 640;
+		// Map width = number of tiles on the x-axis * each tile's width in pixels
+		int width = (Integer) world.getMap().getProperties().get("width");
+		int tileWidth = (Integer) world.getMap().getProperties().get("tilewidth");
+		int mapWidth = width * tileWidth;
+		
+		// Map width = number of tiles on the y-axis * each tile's height in pixels
+		int height = (Integer) world.getMap().getProperties().get("height");
+		int tileHeight = (Integer) world.getMap().getProperties().get("tileheight");
+		int mapHeight = height * tileHeight;
 		
 		if (posX < 0) {
 			player.setPosition(new Vector2(0, posY));
@@ -165,8 +167,6 @@ public class PlayerController {
 	private void checkCollisionsWithLayer(float delta) {
 		// Get the player's velocity in terms of frame units, so that we know how far they will have gone.
 		player.getVelocity().scl(delta);
-		
-		System.out.println("X: " + player.getPosition().x + ", Y: " + player.getPosition().y);
 		
 		// Get a rectangle from the pool, instead of always creating a new one; avoids garbage collection overhead.
 		Rectangle playerRect = rectPool.obtain();
@@ -233,7 +233,7 @@ public class PlayerController {
 	}
 	
 	private void getTiles(int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
-		// Get the "Collision" layer, consisting of all the tiles marked as collidable
+		// Get the "Foreground" layer, consisting of all the tiles marked as foreground
 		TiledMapTileLayer layer = (TiledMapTileLayer) world.getMap().getLayers().get("Foreground");
 		
 		rectPool.freeAll(tiles);
@@ -251,18 +251,6 @@ public class PlayerController {
 			}
 			
 		}
-		
-//		for (int x = 0; x < 640; x++) {
-//			
-//			for (int y = 0; y < 640; y++) {
-//				Cell cell = layer.getCell(x, y);
-//				if (cell != null) {
-//					System.out.println("Cell EXISTS! X: " + x + ", Y: " + y);
-//					Rectangle rect = rectPool.obtain();
-//					rect.set(x, y, 1, 1);
-//					tiles.add(rect);
-//				}
-//			}
-//		}
 	}
+	
 }

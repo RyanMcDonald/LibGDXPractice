@@ -7,7 +7,7 @@ import com.badlogic.gdx.tools.imagepacker.TexturePacker2;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "My Cool Game";
+		cfg.title = "Ryan's Game";
 		cfg.useGL20 = false;
 		cfg.width = 500;
 		cfg.height = 300;

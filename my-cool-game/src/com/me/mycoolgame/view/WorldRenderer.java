@@ -65,6 +65,8 @@ public class WorldRenderer {
 		camera.position.x = playerPosition.x;
 		camera.position.y = playerPosition.y;
 		
+		keepCameraInBounds();
+		
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		
@@ -127,11 +129,6 @@ public class WorldRenderer {
 	}
 	
 	private void renderBackground () {
-//		spriteBatch.disableBlending();
-//		spriteBatch.begin();
-//		spriteBatch.draw(backgroundRegion, Gdx.graphics.getWidth() / 2 - backgroundRegion.getRegionWidth() / 2, Gdx.graphics.getHeight() / 2 - backgroundRegion.getRegionHeight() / 2);
-//		spriteBatch.end();
-		
 		// set the tile map renderer view based on what the camera sees and render the map
 		renderer.setView(camera);
 		renderer.render();
@@ -209,5 +206,33 @@ public class WorldRenderer {
 		
 		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
 		
+	}
+	
+	private void keepCameraInBounds() {
+		// Map width = number of tiles on the x-axis * each tile's width in pixels
+		int width = (Integer) renderer.getMap().getProperties().get("width");
+		int tileWidth = (Integer) renderer.getMap().getProperties().get("tilewidth");
+		int mapWidth = width * tileWidth;
+		
+		// Map width = number of tiles on the y-axis * each tile's height in pixels
+		int height = (Integer) renderer.getMap().getProperties().get("height");
+		int tileHeight = (Integer) renderer.getMap().getProperties().get("tileheight");
+		int mapHeight = height * tileHeight;
+		
+		if (camera.position.x - camera.viewportWidth / 2 < 0) {
+			camera.position.x = camera.viewportWidth / 2;
+		}
+		
+		if (camera.position.x > mapWidth - camera.viewportWidth / 2) {
+			camera.position.x = mapWidth - camera.viewportWidth / 2;
+		}
+		
+		if (camera.position.y - camera.viewportHeight / 2 < 0) {
+			camera.position.y = camera.viewportHeight / 2;
+		}
+		
+		if (camera.position.y > mapHeight - camera.viewportHeight / 2) {
+			camera.position.y = mapHeight - camera.viewportHeight / 2;
+		}
 	}
 }
