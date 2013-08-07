@@ -18,7 +18,7 @@ public class Player {
 	
 	private Vector2 position = new Vector2();
 	private Vector2 velocity = new Vector2();
-	private float speed = 80f;
+	private float speed = 100f;
 	private Rectangle bounds = new Rectangle();
 	private State state = State.IDLE;
 	private Direction facingDirection = Direction.NORTH;
