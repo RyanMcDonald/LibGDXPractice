@@ -69,9 +69,16 @@ public class WorldRenderer {
 		
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
+
+		// set the tile map renderer view based on what the camera sees and render the map
+		renderer.setView(camera);
 		
-		renderBackground();
+		// Render the "Top" layer after the player, so that it overlaps the player, i.e., when they walk behind treetops.
+		renderer.render(new int[] { 0, 1, 3 });
+		
 		renderObjects();
+		
+		renderer.render(new int[] { 2 });
 	}
 	
 	private void loadTextures() {
@@ -126,12 +133,6 @@ public class WorldRenderer {
 		walkSouthwestAnimation = new Animation(RUNNING_FRAME_DURATION, walkSouthwestFrames);
 		walkWestAnimation = new Animation(RUNNING_FRAME_DURATION, walkWestFrames);
 		walkNorthwestAnimation = new Animation(RUNNING_FRAME_DURATION, walkNorthwestFrames);
-	}
-	
-	private void renderBackground () {
-		// set the tile map renderer view based on what the camera sees and render the map
-		renderer.setView(camera);
-		renderer.render();
 	}
 	
 	private void renderObjects() {

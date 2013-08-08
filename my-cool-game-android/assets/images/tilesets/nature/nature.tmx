@@ -13,12 +13,12 @@
  </layer>
  <layer name="Foreground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF9AabgXgLEG8F4m0kyOECu4F4DxDvBeJ9JMiNglEwCgYPICfv4wP0yPsAmxkRTQ==
+   eJxjYBgFQx3sBuI9QLwXiPeRIDcKRsEoGL6AHnkfABEVCNc=
   </data>
  </layer>
  <layer name="Top" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1DcOAjEQQFFfnSxYcs45Z9FAB0fjF66MPYgREg1fes3OyN1OZIzJo4AiSigbfxVUUUMdDTTRQtvuSDO3DrrooY8BhhhhbHekmdsEU8wwxwJLrLC2O9LMbYMtdtjjgCNOONsdaebr4vl2xS2wL81C3d/MHh++9++3xRBHAkmkkEZG+V4WOUTm9d/XJN0FTdJd0CTdBU3SXdAWugvfTLoL2p6I1Eds
+   eJzt1LcOQjEMQNH8Ol3w6L333kXf4NO4Q6bwMGAhsXClM9nKFnvGmCRSSCODrPEvhzwKKKKEMiqo2h1p5lZDHQ000UIbHXTtjjRz66GPAYYYYYwJpnZHmrnNMMcCS6ywxgZbuyPN/NphjwOOOOGMi51Ls3e7vpjdPnzv328LIIgQwoggipjyvTgS8Mzj39ck3QVN0l3QJN0FTdJd0PbsLnwz6S5ouwMS50/i
   </data>
  </layer>
  <objectgroup name="Collision" width="20" height="20">
