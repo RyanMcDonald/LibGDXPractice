@@ -1,6 +1,7 @@
 package com.me.mycoolgame.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -19,8 +20,6 @@ import com.me.mycoolgame.model.Player.State;
 import com.me.mycoolgame.model.World;
 
 public class WorldRenderer {
-
-	private static final float RUNNING_FRAME_DURATION = 0.2f;
 	
 	private World world;
 	private OrthographicCamera camera;
@@ -28,6 +27,8 @@ public class WorldRenderer {
 	
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
+	
+	Music backgroundMusic;
 	
 	private TextureAtlas atlas;
 	private TextureRegion playerIdleNorth;
@@ -58,6 +59,10 @@ public class WorldRenderer {
 		this.atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
 		
 		loadTextures();
+		
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("data/music/places_of_soul.mp3"));
+		backgroundMusic.setLooping(true);
+		backgroundMusic.play();
 	}
 	
 	public void render() {
@@ -125,14 +130,15 @@ public class WorldRenderer {
 			walkNorthwestFrames[i] = atlas.findRegion("player-walking-northwest-" + i);
 		}
 		
-		walkNorthAnimation = new Animation(RUNNING_FRAME_DURATION, walkNorthFrames);
-		walkNortheastAnimation = new Animation(RUNNING_FRAME_DURATION, walkNortheastFrames);
-		walkEastAnimation = new Animation(RUNNING_FRAME_DURATION, walkEastFrames);
-		walkSoutheastAnimation = new Animation(RUNNING_FRAME_DURATION, walkSoutheastFrames);
-		walkSouthAnimation = new Animation(RUNNING_FRAME_DURATION, walkSouthFrames);
-		walkSouthwestAnimation = new Animation(RUNNING_FRAME_DURATION, walkSouthwestFrames);
-		walkWestAnimation = new Animation(RUNNING_FRAME_DURATION, walkWestFrames);
-		walkNorthwestAnimation = new Animation(RUNNING_FRAME_DURATION, walkNorthwestFrames);
+		float walkingFrameDuration = world.getPlayer().getSpeed() / 800;
+		walkNorthAnimation = new Animation(walkingFrameDuration, walkNorthFrames);
+		walkNortheastAnimation = new Animation(walkingFrameDuration, walkNortheastFrames);
+		walkEastAnimation = new Animation(walkingFrameDuration, walkEastFrames);
+		walkSoutheastAnimation = new Animation(walkingFrameDuration, walkSoutheastFrames);
+		walkSouthAnimation = new Animation(walkingFrameDuration, walkSouthFrames);
+		walkSouthwestAnimation = new Animation(walkingFrameDuration, walkSouthwestFrames);
+		walkWestAnimation = new Animation(walkingFrameDuration, walkWestFrames);
+		walkNorthwestAnimation = new Animation(walkingFrameDuration, walkNorthwestFrames);
 	}
 	
 	private void renderObjects() {

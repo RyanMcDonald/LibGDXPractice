@@ -197,7 +197,7 @@ public class PlayerController {
 		int tileWidth = (Integer) world.getMap().getProperties().get("tilewidth");
 		int mapWidth = width * tileWidth;
 		
-		// Map width = number of tiles on the y-axis * each tile's height in pixels
+		// Map height = number of tiles on the y-axis * each tile's height in pixels
 		int height = (Integer) world.getMap().getProperties().get("height");
 		int tileHeight = (Integer) world.getMap().getProperties().get("tileheight");
 		int mapHeight = height * tileHeight;
