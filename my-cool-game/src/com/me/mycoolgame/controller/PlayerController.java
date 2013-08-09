@@ -202,21 +202,26 @@ public class PlayerController {
 		int tileHeight = (Integer) world.getMap().getProperties().get("tileheight");
 		int mapHeight = height * tileHeight;
 		
+		float newPosX = posX;
+		float newPosY = posY;
+
 		if (posX < 0) {
-			player.setPosition(new Vector2(0, posY));
+			newPosX = 0;
 		}
-		
+
 		if (posX > mapWidth - player.getWidth()) {
-			player.setPosition(new Vector2(mapWidth - player.getWidth(), posY));
+			newPosX = mapWidth - player.getWidth();
 		}
 		
 		if (posY < 0) {
-			player.setPosition(new Vector2(posX, 0));
+			newPosY = 0;
 		}
 		
 		if (posY > mapHeight - player.getHeight()) {
-			player.setPosition(new Vector2(posX, mapHeight - player.getHeight()));
+			newPosY = mapHeight - player.getHeight();
 		}
+
+		player.setPosition(new Vector2(newPosX, newPosY));
 	}
 	
 	private void checkCollisionsWithLayer(String layerName, float delta) {
