@@ -30,7 +30,7 @@ public class SplashScreen implements Screen {
 		
 		// We still have assets to load, display the progress bar
 		float progress = Assets.manager.getProgress();
-		System.out.println("Assets loading: " + progress);
+		//System.out.println("Assets loading: " + progress);
 		
 	}
 

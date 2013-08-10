@@ -55,6 +55,10 @@ public class GameScreen implements Screen, InputProcessor {
 			controller.leftPressed();
 		}
 		
+		if (keycode == Keys.F) {
+			controller.shootPressed();
+		}
+		
 		return true;
 	}
 
@@ -76,6 +80,10 @@ public class GameScreen implements Screen, InputProcessor {
 			controller.leftReleased();
 		}
 		
+		if (keycode == Keys.F) {
+			controller.shootReleased();
+		}
+		
 		return true;
 	}
 
@@ -87,12 +95,14 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
+		controller.shootPressed();
+		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
+		controller.shootReleased();
+		return true;
 	}
 
 	@Override
@@ -185,6 +195,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public void dispose() {
 		Gdx.input.setInputProcessor(null);
 		spriteBatch.dispose();
+		renderer.dispose();
 	}
 
 }

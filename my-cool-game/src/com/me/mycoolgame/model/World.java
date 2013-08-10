@@ -14,7 +14,7 @@ public class World {
 	
 	private void createDemoWorld() {
 		// TODO: Do some checks to see what kind of class they are and load the appropriate player
-		player = new RoguePlayer(new Vector2(256, 352));
+		player = new MagePlayer(new Vector2(256, 352));
 		map = null;
 	}
 	

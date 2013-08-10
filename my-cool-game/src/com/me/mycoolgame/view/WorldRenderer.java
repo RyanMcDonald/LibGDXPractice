@@ -2,6 +2,7 @@ package com.me.mycoolgame.view;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.State;
+import com.me.mycoolgame.model.SkillEffect;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.util.Assets;
 
@@ -81,7 +83,15 @@ public class WorldRenderer {
 		// Render the "Top" layer after the player, so that it overlaps the player, i.e., when they walk behind treetops.
 		renderer.render(new int[] { 0, 1, 3 });
 
+		spriteBatch.enableBlending();
+		spriteBatch.begin();
+		
 		renderPlayer();
+		
+		// Render objects associated with the player, e.g., spell effects
+		renderPlayerSkillEffects();
+		
+		spriteBatch.end();
 		
 		renderer.render(new int[] { 2 });
 	}
@@ -95,7 +105,7 @@ public class WorldRenderer {
 		playerIdleNortheast = atlas.findRegion(player.getIdleNortheastImage());
 		playerIdleEast = atlas.findRegion(player.getIdleEastImage());
 		playerIdleSoutheast = atlas.findRegion(player.getIdleSoutheastImage());
-		playerIdleSouth = atlas.findRegion(player.getIdleNorthImage());
+		playerIdleSouth = atlas.findRegion(player.getIdleSouthImage());
 		playerIdleSouthwest = atlas.findRegion(player.getIdleSouthwestImage());
 		playerIdleWest = atlas.findRegion(player.getIdleWestImage());
 		playerIdleNorthwest = atlas.findRegion(player.getIdleNorthwestImage());
@@ -220,10 +230,17 @@ public class WorldRenderer {
 			}
 		}
 
-		spriteBatch.enableBlending();
-		spriteBatch.begin();
 		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
-		spriteBatch.end();
+		
+	}
+	
+	private void renderPlayerSkillEffects() {
+		for (SkillEffect effect : player.getSkillEffects()) {
+			if (effect.getState() == SkillEffect.State.ACTIVE) {
+				Texture effectTexture = Assets.manager.get(effect.getImage(), Texture.class);
+				spriteBatch.draw(effectTexture, effect.getPosition().x, effect.getPosition().y);
+			}
+		}
 	}
 	
 	private void keepCameraInBounds() {
@@ -252,5 +269,9 @@ public class WorldRenderer {
 		if (camera.position.y > mapHeight - camera.viewportHeight / 2) {
 			camera.position.y = mapHeight - camera.viewportHeight / 2;
 		}
+	}
+	
+	public void dispose() {
+		
 	}
 }

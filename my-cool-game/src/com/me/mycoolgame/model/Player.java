@@ -25,12 +25,16 @@ public abstract class Player {
 	private Direction facingDirection = Direction.NORTH;
 	private float stateTime = 0;
 	
+	Array<SkillEffect> skillEffects;
+	
 	public Player(Vector2 position) {
 		this.position = position;
 		this.bounds.x = position.x;
 		this.bounds.y = position.y;
 		this.bounds.width = width;
 		this.bounds.height = height;
+		
+		skillEffects = new Array<SkillEffect>();
 	}
 
 	public float getWidth() {
@@ -39,6 +43,7 @@ public abstract class Player {
 
 	public void setWidth(float width) {
 		this.width = width;
+		this.bounds.width = width;
 	}
 
 	public float getHeight() {
@@ -47,6 +52,7 @@ public abstract class Player {
 
 	public void setHeight(float height) {
 		this.height = height;
+		this.bounds.height = height;
 	}
 
 	public Vector2 getPosition() {
@@ -107,6 +113,14 @@ public abstract class Player {
 		this.stateTime = stateTime;
 	}
 	
+	public Array<SkillEffect> getSkillEffects() {
+		return skillEffects;
+	}
+
+	public void setActiveSkills(Array<SkillEffect> skillEffects) {
+		this.skillEffects = skillEffects;
+	}
+
 	public void update(float delta) {
 		this.stateTime += delta;
 		position.add(velocity.x * delta, velocity.y * delta);
@@ -147,5 +161,7 @@ public abstract class Player {
 	public abstract void setWalkSouthwestImages(Array<String> walkSouthwestImages);
 	public abstract void setWalkWestImages(Array<String> walkWestImages);
 	public abstract void setWalkNorthwestImages(Array<String> walkNorthwestImages);
+	
+	public abstract void shoot();
 	
 }

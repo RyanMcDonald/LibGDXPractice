@@ -3,7 +3,7 @@ package com.me.mycoolgame.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class RoguePlayer extends Player {
+public class MagePlayer extends Player {
 
 	private String idleNorthImage;
 	private String idleNortheastImage;
@@ -23,7 +23,9 @@ public class RoguePlayer extends Player {
 	private Array<String> walkWestImages;
 	private Array<String> walkNorthwestImages;
 	
-	public RoguePlayer(Vector2 position) {
+	private Projectile projectile;
+	
+	public MagePlayer(Vector2 position) {
 		super(position);
 		
 		idleNorthImage = "player-idle-north";
@@ -74,8 +76,29 @@ public class RoguePlayer extends Player {
 		walkNorthwestImages.add("player-walking-northwest-1");
 		walkNorthwestImages.add(idleNorthwestImage);
 		walkNorthwestImages.add("player-walking-northwest-2");
+		
+		projectile = new Projectile(new Vector2(), getFacingDirection());
+		skillEffects.add(projectile);
 	}
 
+	public void update(float delta) {
+		super.update(delta);
+		
+		if (projectile.getState().equals(SkillEffect.State.ACTIVE)) {
+			projectile.update(delta);
+		}
+	}
+
+	public void shoot() {
+		if (projectile.getState().equals(SkillEffect.State.READY)) {
+			projectile.setPosition(getPosition().cpy());
+			projectile.setInitialPosition(getPosition().cpy());
+			projectile.setShootingDirection(getFacingDirection());
+			
+			projectile.setState(SkillEffect.State.ACTIVE);
+		}
+	}
+	
 	public String getIdleNorthImage() {
 		return idleNorthImage;
 	}
@@ -204,9 +227,12 @@ public class RoguePlayer extends Player {
 		this.walkNorthwestImages = walkNorthwestImages;
 	}
 
-	public void shoot() {
-		// TODO Auto-generated method stub
-		
+	public Projectile getProjectile() {
+		return projectile;
+	}
+	
+	public void setProjectile(Projectile projectile) {
+		this.projectile = projectile;
 	}
 
 }
