@@ -1,20 +1,15 @@
 package com.me.mycoolgame.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Array;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.State;
 import com.me.mycoolgame.model.World;
@@ -23,6 +18,7 @@ import com.me.mycoolgame.util.Assets;
 public class WorldRenderer {
 	
 	private World world;
+	private Player player;
 	private OrthographicCamera camera;
 	private SpriteBatch spriteBatch;
 	
@@ -52,6 +48,7 @@ public class WorldRenderer {
 	
 	public WorldRenderer(World world, SpriteBatch spriteBatch) {
 		this.world = world;
+		this.player = world.getPlayer();
 		this.camera = new OrthographicCamera();
 		camera.setToOrtho(false, 500, 300);
 		camera.update();
@@ -83,8 +80,8 @@ public class WorldRenderer {
 		
 		// Render the "Top" layer after the player, so that it overlaps the player, i.e., when they walk behind treetops.
 		renderer.render(new int[] { 0, 1, 3 });
-		
-		renderObjects();
+
+		renderPlayer();
 		
 		renderer.render(new int[] { 2 });
 	}
@@ -94,43 +91,63 @@ public class WorldRenderer {
 		world.setMap(map);
 		renderer = new OrthogonalTiledMapRenderer(map, 1f);
 		
-		playerIdleNorth = atlas.findRegion("player-idle-north");
-		playerIdleNortheast = atlas.findRegion("player-idle-northeast");
-		playerIdleEast = atlas.findRegion("player-idle-east");
-		playerIdleSoutheast = atlas.findRegion("player-idle-southeast");
-		playerIdleSouth = atlas.findRegion("player-idle-south");
-		playerIdleSouthwest = atlas.findRegion("player-idle-southwest");
-		playerIdleWest = atlas.findRegion("player-idle-west");
-		playerIdleNorthwest = atlas.findRegion("player-idle-northwest");
+		playerIdleNorth = atlas.findRegion(player.getIdleNorthImage());
+		playerIdleNortheast = atlas.findRegion(player.getIdleNortheastImage());
+		playerIdleEast = atlas.findRegion(player.getIdleEastImage());
+		playerIdleSoutheast = atlas.findRegion(player.getIdleSoutheastImage());
+		playerIdleSouth = atlas.findRegion(player.getIdleNorthImage());
+		playerIdleSouthwest = atlas.findRegion(player.getIdleSouthwestImage());
+		playerIdleWest = atlas.findRegion(player.getIdleWestImage());
+		playerIdleNorthwest = atlas.findRegion(player.getIdleNorthwestImage());
 
-		TextureRegion[] walkNorthFrames = new TextureRegion[3];
-		TextureRegion[] walkNortheastFrames = new TextureRegion[3];
-		TextureRegion[] walkEastFrames = new TextureRegion[3];
-		TextureRegion[] walkSoutheastFrames = new TextureRegion[3];
-		TextureRegion[] walkSouthFrames = new TextureRegion[3];
-		TextureRegion[] walkSouthwestFrames = new TextureRegion[3];
-		TextureRegion[] walkWestFrames = new TextureRegion[3];
-		TextureRegion[] walkNorthwestFrames = new TextureRegion[3];
+		Array<String> walkNorthImages = player.getWalkNorthImages();
+		Array<String> walkNortheastImages = player.getWalkNortheastImages();
+		Array<String> walkEastImages = player.getWalkEastImages();
+		Array<String> walkSoutheastImages = player.getWalkSoutheastImages();
+		Array<String> walkSouthImages = player.getWalkSouthImages();
+		Array<String> walkSouthwestImages = player.getWalkSouthwestImages();
+		Array<String> walkWestImages = player.getWalkWestImages();
+		Array<String> walkNorthwestImages = player.getWalkNorthwestImages();
 		
-		// We want the idle images to be the first frame of the animations
-		walkNorthFrames[0] = atlas.findRegion("player-idle-north");
-		walkNortheastFrames[0] = atlas.findRegion("player-idle-northeast");
-		walkEastFrames[0] = atlas.findRegion("player-idle-east");
-		walkSoutheastFrames[0] = atlas.findRegion("player-idle-southeast");
-		walkSouthFrames[0] = atlas.findRegion("player-idle-south");
-		walkSouthwestFrames[0] = atlas.findRegion("player-idle-southwest");
-		walkWestFrames[0] = atlas.findRegion("player-idle-west");
-		walkNorthwestFrames[0] = atlas.findRegion("player-idle-northwest");
+		TextureRegion[] walkNorthFrames = new TextureRegion[walkNorthImages.size];
+		TextureRegion[] walkNortheastFrames = new TextureRegion[walkNortheastImages.size];
+		TextureRegion[] walkEastFrames = new TextureRegion[walkEastImages.size];
+		TextureRegion[] walkSoutheastFrames = new TextureRegion[walkSoutheastImages.size];
+		TextureRegion[] walkSouthFrames = new TextureRegion[walkSouthImages.size];
+		TextureRegion[] walkSouthwestFrames = new TextureRegion[walkSouthwestImages.size];
+		TextureRegion[] walkWestFrames = new TextureRegion[walkWestImages.size];
+		TextureRegion[] walkNorthwestFrames = new TextureRegion[walkNorthwestImages.size];
 		
-		for (int i = 1; i < 3; i++) {
-			walkNorthFrames[i] = atlas.findRegion("player-walking-north-" + i);
-			walkNortheastFrames[i] = atlas.findRegion("player-walking-northeast-" + i);
-			walkEastFrames[i] = atlas.findRegion("player-walking-east-" + i);
-			walkSoutheastFrames[i] = atlas.findRegion("player-walking-southeast-" + i);
-			walkSouthFrames[i] = atlas.findRegion("player-walking-south-" + i);
-			walkSouthwestFrames[i] = atlas.findRegion("player-walking-southwest-" + i);
-			walkWestFrames[i] = atlas.findRegion("player-walking-west-" + i);
-			walkNorthwestFrames[i] = atlas.findRegion("player-walking-northwest-" + i);
+		for (int i = 0; i < walkNorthImages.size; i++) {
+			walkNorthFrames[i] = atlas.findRegion(walkNorthImages.get(i));
+		}
+
+		for (int i = 0; i < walkNortheastImages.size; i++) {
+			walkNortheastFrames[i] = atlas.findRegion(walkNortheastImages.get(i));
+		}
+
+		for (int i = 0; i < walkEastImages.size; i++) {
+			walkEastFrames[i] = atlas.findRegion(walkEastImages.get(i));
+		}
+
+		for (int i = 0; i < walkSoutheastImages.size; i++) {
+			walkSoutheastFrames[i] = atlas.findRegion(walkSoutheastImages.get(i));
+		}
+
+		for (int i = 0; i < walkSouthImages.size; i++) {
+			walkSouthFrames[i] = atlas.findRegion(walkSouthImages.get(i));
+		}
+
+		for (int i = 0; i < walkSouthwestImages.size; i++) {
+			walkSouthwestFrames[i] = atlas.findRegion(walkSouthwestImages.get(i));
+		}
+
+		for (int i = 0; i < walkWestImages.size; i++) {
+			walkWestFrames[i] = atlas.findRegion(walkWestImages.get(i));
+		}
+
+		for (int i = 0; i < walkNorthwestImages.size; i++) {
+			walkNorthwestFrames[i] = atlas.findRegion(walkNorthwestImages.get(i));
 		}
 		
 		float walkingFrameDuration = world.getPlayer().getSpeed() / 800;
@@ -143,19 +160,8 @@ public class WorldRenderer {
 		walkWestAnimation = new Animation(walkingFrameDuration, walkWestFrames);
 		walkNorthwestAnimation = new Animation(walkingFrameDuration, walkNorthwestFrames);
 	}
-	
-	private void renderObjects() {
-		spriteBatch.enableBlending();
-		spriteBatch.begin();
-		
-		renderPlayer();
-		
-		spriteBatch.end();
-	}
-	
+
 	private void renderPlayer() {
-		
-		Player player = world.getPlayer();
 		TextureRegion playerFrame = null;
 		
 		if (player.getState().equals(State.IDLE)) {
@@ -213,8 +219,11 @@ public class WorldRenderer {
 				break;
 			}
 		}
-		
+
+		spriteBatch.enableBlending();
+		spriteBatch.begin();
 		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
+		spriteBatch.end();
 	}
 	
 	private void keepCameraInBounds() {

@@ -13,7 +13,8 @@ public class World {
 	}
 	
 	private void createDemoWorld() {
-		player = new Player(new Vector2(256, 352));
+		// TODO: Do some checks to see what kind of class they are and load the appropriate player
+		player = new RoguePlayer(new Vector2(256, 352));
 		map = null;
 	}
 	

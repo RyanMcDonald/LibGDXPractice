@@ -2,8 +2,9 @@ package com.me.mycoolgame.model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-public class Player {
+public abstract class Player {
 
 	public enum State {
 		IDLE, WALKING, DEAD
@@ -110,5 +111,41 @@ public class Player {
 		this.stateTime += delta;
 		position.add(velocity.x * delta, velocity.y * delta);
 	}
+	
+	public abstract String getIdleNorthImage();
+	public abstract String getIdleNortheastImage();
+	public abstract String getIdleEastImage();
+	public abstract String getIdleSoutheastImage();
+	public abstract String getIdleSouthImage();
+	public abstract String getIdleSouthwestImage();
+	public abstract String getIdleWestImage();
+	public abstract String getIdleNorthwestImage();
+	
+	public abstract void setIdleNorthImage(String idleNorthImage);
+	public abstract void setIdleNortheastImage(String idleNortheastImage);
+	public abstract void setIdleEastImage(String idleEastImage);
+	public abstract void setIdleSoutheastImage(String idleSoutheastImage);
+	public abstract void setIdleSouthImage(String idleSouthImage);
+	public abstract void setIdleSouthwestImage(String idleSouthwestImage);
+	public abstract void setIdleWestImage(String idleWestImage);
+	public abstract void setIdleNorthwestImage(String idleNorthwestImage);
+	
+	public abstract Array<String> getWalkNorthImages();
+	public abstract Array<String> getWalkNortheastImages();
+	public abstract Array<String> getWalkEastImages();
+	public abstract Array<String> getWalkSoutheastImages();
+	public abstract Array<String> getWalkSouthImages();
+	public abstract Array<String> getWalkSouthwestImages();
+	public abstract Array<String> getWalkWestImages();
+	public abstract Array<String> getWalkNorthwestImages();
+
+	public abstract void setWalkNorthImages(Array<String> walkNorthImages);
+	public abstract void setWalkNortheastImages(Array<String> walkNortheastImages);
+	public abstract void setWalkEastImages(Array<String> walkEastImages);
+	public abstract void setWalkSoutheastImages(Array<String> walkSoutheastImages);
+	public abstract void setWalkSouthImages(Array<String> walkSouthImages);
+	public abstract void setWalkSouthwestImages(Array<String> walkSouthwestImages);
+	public abstract void setWalkWestImages(Array<String> walkWestImages);
+	public abstract void setWalkNorthwestImages(Array<String> walkNorthwestImages);
 	
 }
