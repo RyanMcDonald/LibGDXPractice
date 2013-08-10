@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.State;
 import com.me.mycoolgame.model.World;
+import com.me.mycoolgame.util.Assets;
 
 public class WorldRenderer {
 	
@@ -56,17 +57,19 @@ public class WorldRenderer {
 		camera.update();
 		
 		this.spriteBatch = spriteBatch;
-		this.atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
+		this.atlas = Assets.manager.get("images/textures/textures.pack", TextureAtlas.class);
 		
 		loadTextures();
-		
-		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("data/music/places_of_soul.mp3"));
+
+		backgroundMusic = Assets.manager.get("data/music/places_of_soul.mp3", Music.class);
 		backgroundMusic.setLooping(true);
 		backgroundMusic.play();
 	}
 	
 	public void render() {
 		Vector2 playerPosition = world.getPlayer().getPosition();
+
+		// Keep the camera centered on the player
 		camera.position.x = playerPosition.x;
 		camera.position.y = playerPosition.y;
 		
@@ -87,7 +90,7 @@ public class WorldRenderer {
 	}
 	
 	private void loadTextures() {
-		map = new TmxMapLoader().load("images/tilesets/nature/nature.tmx");
+		map = Assets.manager.get("images/tilesets/nature/nature.tmx");
 		world.setMap(map);
 		renderer = new OrthogonalTiledMapRenderer(map, 1f);
 		

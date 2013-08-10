@@ -14,13 +14,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.me.mycoolgame.MyCoolGame;
 import com.me.mycoolgame.controller.PlayerController;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.view.WorldRenderer;
 
 public class GameScreen implements Screen, InputProcessor {
 
-	private Game game;
+	private MyCoolGame game;
 	
 	private SpriteBatch spriteBatch;
 	private World world;
@@ -31,9 +32,9 @@ public class GameScreen implements Screen, InputProcessor {
 	private Stage stage;
 	private Touchpad touchpad;
 	
-	public GameScreen(Game game) {
+	public GameScreen(MyCoolGame game, SpriteBatch spriteBatch) {
 		this.game = game;
-		spriteBatch = new SpriteBatch();
+		this.spriteBatch = spriteBatch;
 	}
 	
 	@Override

@@ -87,8 +87,8 @@ public class PlayerController {
 		float touchpadX = touchpad.getKnobPercentX();
 		float touchpadY = touchpad.getKnobPercentY();
 		
-		float newXVelocity = touchpadX * world.getPlayer().getSpeed();
-		float newYVelocity = touchpadY * world.getPlayer().getSpeed();
+		float newXVelocity = touchpadX * player.getSpeed();
+		float newYVelocity = touchpadY * player.getSpeed();
 		Vector2 newVelocity = new Vector2(newXVelocity, newYVelocity);
 		
 		// Calculate what direction the player should be facing based on the touchpad orientation. Default to North.
