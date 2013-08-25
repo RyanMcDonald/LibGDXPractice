@@ -1,5 +1,7 @@
 package com.me.mycoolgame.model;
 
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,12 +20,31 @@ public class MagePlayer extends Player {
 
 	public void update(float delta) {
 		super.update(delta);
+
+		// Update the player's skill cooldowns
+		for (Map.Entry<String, Float> entry : getCooldowns().entrySet()) {
+			Float updatedCooldown = entry.getValue() - delta;
+
+			// If the cooldown has finished, remove the entry
+			if (updatedCooldown <= 0) {
+				getCooldowns().remove(entry.getKey());
+			} else {
+				entry.setValue(updatedCooldown);
+			}
+
+		}
 	}
 
 	public void shoot(World world) {
-		Fireball fireball = new Fireball(getPosition().cpy(), getFacingDirection());
-		FireballController controller = new FireballController(world, fireball);
-		getSkillControllers().add(controller);
+		// If the skill isn't in the cooldown list, then it's available to use
+		if (getCooldowns().get(Fireball.NAME) == null) {
+			Fireball fireball = new Fireball(getPosition().cpy(), getFacingDirection());
+			FireballController controller = new FireballController(world, fireball);
+			getSkillControllers().add(controller);
+
+			// They shot the fireball, now set the cooldown
+			getCooldowns().put(Fireball.NAME, fireball.getCooldown());
+		}
 	}
 
 	@Override
@@ -127,10 +148,6 @@ public class MagePlayer extends Player {
 		setWalkSouthwestAnimation(new Animation(walkingFrameDuration, walkSouthwestFrames));
 		setWalkWestAnimation(new Animation(walkingFrameDuration, walkWestFrames));
 		setWalkNorthwestAnimation(new Animation(walkingFrameDuration, walkNorthwestFrames));
-
-//		for (Skill skill : getSkills()) {
-//			skill.loadTextures(atlas);
-//		}
 	}
 
 }

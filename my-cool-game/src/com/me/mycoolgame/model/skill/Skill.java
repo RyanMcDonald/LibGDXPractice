@@ -20,6 +20,8 @@ public abstract class Skill {
 	private float speed = 0;
 	private State state;
 	private float stateTime = 0;
+
+	private Float cooldown;
 	
 	private Animation activeAnimation;
 
@@ -105,6 +107,14 @@ public abstract class Skill {
 
 	public void setStateTime(float stateTime) {
 		this.stateTime = stateTime;
+	}
+
+	public Float getCooldown() {
+		return cooldown;
+	}
+
+	public void setCooldown(Float cooldown) {
+		this.cooldown = cooldown;
 	}
 
 	public Animation getActiveAnimation() {

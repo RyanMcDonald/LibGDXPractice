@@ -3,7 +3,6 @@ package com.me.mycoolgame.controller.skill;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.model.skill.Skill;
 

@@ -9,8 +9,10 @@ import com.me.mycoolgame.model.Player.Direction;
 
 public class Fireball extends Skill {
 
+	public static final String NAME = "fireball";
+
 	private Direction shootingDirection = Direction.NORTH;
-	
+
 	// Keep track of the initial position so we know how far the projectile has travelled
 	private Vector2 initialPosition;
 	
@@ -25,6 +27,8 @@ public class Fireball extends Skill {
 		setWidth(32f);
 		setHeight(32f);
 		
+		setCooldown(0f);
+
 		setSpeed(200f);
 
 		setState(State.ACTIVE);

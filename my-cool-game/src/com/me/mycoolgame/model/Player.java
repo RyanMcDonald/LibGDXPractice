@@ -1,5 +1,8 @@
 package com.me.mycoolgame.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,6 +22,8 @@ public abstract class Player {
 		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 	}
 	
+	private Map<String, Float> cooldowns = new HashMap<String, Float>();
+
 	private TextureRegion idleNorthTextureRegion;
 	private TextureRegion idleNortheastTextureRegion;
 	private TextureRegion idleEastTextureRegion;
@@ -293,6 +298,14 @@ public abstract class Player {
 
 	public abstract void loadTextures(TextureAtlas atlas);
 	
+	public Map<String, Float> getCooldowns() {
+		return cooldowns;
+	}
+
+	public void setCooldowns(Map<String, Float> cooldowns) {
+		this.cooldowns = cooldowns;
+	}
+
 	public abstract void shoot(World world);
 	
 }
