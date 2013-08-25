@@ -3,7 +3,7 @@ package com.me.mycoolgame.model;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class SkillEffect {
+public abstract class Skill {
 	
 	public enum State {
 		READY, ACTIVE, DONE
@@ -21,7 +21,7 @@ public class SkillEffect {
 	
 	private String image;
 	
-	public SkillEffect(Vector2 position) {
+	public Skill(Vector2 position) {
 		this.position = position;
 		this.bounds.x = position.x;
 		this.bounds.y = position.y;

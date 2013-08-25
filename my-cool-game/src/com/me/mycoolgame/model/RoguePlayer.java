@@ -204,7 +204,8 @@ public class RoguePlayer extends Player {
 		this.walkNorthwestImages = walkNorthwestImages;
 	}
 
-	public void shoot() {
+	@Override
+	public void shoot(World world) {
 		// TODO Auto-generated method stub
 		
 	}

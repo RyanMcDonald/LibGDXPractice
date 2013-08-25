@@ -1,9 +1,10 @@
-package com.me.mycoolgame.model;
+package com.me.mycoolgame.model.skill;
 
 import com.badlogic.gdx.math.Vector2;
+import com.me.mycoolgame.model.Skill;
 import com.me.mycoolgame.model.Player.Direction;
 
-public class Projectile extends SkillEffect {
+public class Fireball extends Skill {
 
 	private Direction shootingDirection = Direction.NORTH;
 	
@@ -12,7 +13,7 @@ public class Projectile extends SkillEffect {
 	
 	private int travelDistancePixels = 200;
 	
-	public Projectile(Vector2 position, Direction shootingDirection) {
+	public Fireball(Vector2 position, Direction shootingDirection) {
 		super(position);
 		
 		this.shootingDirection = shootingDirection;
@@ -24,52 +25,12 @@ public class Projectile extends SkillEffect {
 		setHeight(32f);
 		
 		setSpeed(200f);
+
+		setState(State.ACTIVE);
 	}
 	
 	public void update(float delta) {
 		super.update(delta);
-		
-		// Check if the projectile has gone its maximum distance
-		if (getPosition().dst(initialPosition) > travelDistancePixels) {
-			reset();
-		}
-		
-		// Set velocity based on the direction it's shooting
-		switch (shootingDirection) {
-		case NORTH:
-			getVelocity().x = 0;
-			getVelocity().y = getSpeed();
-			break;
-		case NORTHEAST:
-			getVelocity().x = getSpeed();
-			getVelocity().y = getSpeed();
-			break;
-		case EAST:
-			getVelocity().x = getSpeed();
-			getVelocity().y = 0;
-			break;
-		case SOUTHEAST:
-			getVelocity().x = getSpeed();
-			getVelocity().y = -getSpeed();
-			break;
-		case SOUTH:
-			getVelocity().x = 0;
-			getVelocity().y = -getSpeed();
-			break;
-		case SOUTHWEST:
-			getVelocity().x = -getSpeed();
-			getVelocity().y = -getSpeed();
-			break;
-		case WEST:
-			getVelocity().x = -getSpeed();
-			getVelocity().y = 0;
-			break;
-		case NORTHWEST:
-			getVelocity().x = -getSpeed();
-			getVelocity().y = getSpeed();
-			break;
-		}
-		
 		getPosition().add(getVelocity().x * delta, getVelocity().y * delta);
 	}
 	

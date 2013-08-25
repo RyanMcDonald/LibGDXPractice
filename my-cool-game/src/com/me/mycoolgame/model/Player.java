@@ -3,6 +3,7 @@ package com.me.mycoolgame.model;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.me.mycoolgame.controller.skill.SkillController;
 
 public abstract class Player {
 
@@ -25,7 +26,7 @@ public abstract class Player {
 	private Direction facingDirection = Direction.NORTH;
 	private float stateTime = 0;
 	
-	Array<SkillEffect> skillEffects;
+	private Array<SkillController> skillControllers;
 	
 	public Player(Vector2 position) {
 		this.position = position;
@@ -34,7 +35,7 @@ public abstract class Player {
 		this.bounds.width = width;
 		this.bounds.height = height;
 		
-		skillEffects = new Array<SkillEffect>();
+		skillControllers = new Array<SkillController>();
 	}
 
 	public float getWidth() {
@@ -113,12 +114,12 @@ public abstract class Player {
 		this.stateTime = stateTime;
 	}
 	
-	public Array<SkillEffect> getSkillEffects() {
-		return skillEffects;
+	public Array<SkillController> getSkillControllers() {
+		return skillControllers;
 	}
 
-	public void setActiveSkills(Array<SkillEffect> skillEffects) {
-		this.skillEffects = skillEffects;
+	public void setSkillControllers(Array<SkillController> skillControllers) {
+		this.skillControllers = skillControllers;
 	}
 
 	public void update(float delta) {
@@ -162,6 +163,6 @@ public abstract class Player {
 	public abstract void setWalkWestImages(Array<String> walkWestImages);
 	public abstract void setWalkNorthwestImages(Array<String> walkNorthwestImages);
 	
-	public abstract void shoot();
+	public abstract void shoot(World world);
 	
 }

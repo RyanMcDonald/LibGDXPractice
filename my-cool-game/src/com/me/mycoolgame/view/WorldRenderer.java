@@ -11,9 +11,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.me.mycoolgame.controller.skill.SkillController;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.State;
-import com.me.mycoolgame.model.SkillEffect;
+import com.me.mycoolgame.model.Skill;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.util.Assets;
 
@@ -88,8 +89,8 @@ public class WorldRenderer {
 		
 		renderPlayer();
 		
-		// Render objects associated with the player, e.g., spell effects
-		renderPlayerSkillEffects();
+		// Render objects associated with the player, e.g., skills
+		renderPlayerSkills();
 		
 		spriteBatch.end();
 		
@@ -234,11 +235,12 @@ public class WorldRenderer {
 		
 	}
 	
-	private void renderPlayerSkillEffects() {
-		for (SkillEffect effect : player.getSkillEffects()) {
-			if (effect.getState() == SkillEffect.State.ACTIVE) {
-				Texture effectTexture = Assets.manager.get(effect.getImage(), Texture.class);
-				spriteBatch.draw(effectTexture, effect.getPosition().x, effect.getPosition().y);
+	private void renderPlayerSkills() {
+		for (SkillController controller : player.getSkillControllers()) {
+			Skill skill = controller.getSkill();
+			if (skill.getState() == Skill.State.ACTIVE) {
+				Texture effectTexture = Assets.manager.get(skill.getImage(), Texture.class);
+				spriteBatch.draw(effectTexture, skill.getPosition().x, skill.getPosition().y);
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.me.mycoolgame.controller.skill.SkillController;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.Direction;
 import com.me.mycoolgame.model.Player.State;
@@ -84,7 +85,8 @@ public class PlayerController {
 	}
 	
 	public void shootPressed() {
-		player.shoot();
+		// Pass in the World so that we can create a controller for the skill
+		player.shoot(world);
 	}
 	
 	public void shootReleased() {
@@ -146,6 +148,10 @@ public class PlayerController {
 			preventOutOfBounds();
 		}
 		
+		for (SkillController controller : player.getSkillControllers()) {
+			controller.update(delta);
+		}
+
 		player.update(delta);
 	}
 	

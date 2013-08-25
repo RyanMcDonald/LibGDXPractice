@@ -2,6 +2,8 @@ package com.me.mycoolgame.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.me.mycoolgame.controller.skill.FireballController;
+import com.me.mycoolgame.model.skill.Fireball;
 
 public class MagePlayer extends Player {
 
@@ -22,8 +24,6 @@ public class MagePlayer extends Player {
 	private Array<String> walkSouthwestImages;
 	private Array<String> walkWestImages;
 	private Array<String> walkNorthwestImages;
-	
-	private Projectile projectile;
 	
 	public MagePlayer(Vector2 position) {
 		super(position);
@@ -76,27 +76,16 @@ public class MagePlayer extends Player {
 		walkNorthwestImages.add("player-walking-northwest-1");
 		walkNorthwestImages.add(idleNorthwestImage);
 		walkNorthwestImages.add("player-walking-northwest-2");
-		
-		projectile = new Projectile(new Vector2(), getFacingDirection());
-		skillEffects.add(projectile);
 	}
 
 	public void update(float delta) {
 		super.update(delta);
-		
-		if (projectile.getState().equals(SkillEffect.State.ACTIVE)) {
-			projectile.update(delta);
-		}
 	}
 
-	public void shoot() {
-		if (projectile.getState().equals(SkillEffect.State.READY)) {
-			projectile.setPosition(getPosition().cpy());
-			projectile.setInitialPosition(getPosition().cpy());
-			projectile.setShootingDirection(getFacingDirection());
-			
-			projectile.setState(SkillEffect.State.ACTIVE);
-		}
+	public void shoot(World world) {
+		Fireball fireball = new Fireball(getPosition().cpy(), getFacingDirection());
+		FireballController controller = new FireballController(world, fireball);
+		getSkillControllers().add(controller);
 	}
 	
 	public String getIdleNorthImage() {
@@ -225,14 +214,6 @@ public class MagePlayer extends Player {
 
 	public void setWalkNorthwestImages(Array<String> walkNorthwestImages) {
 		this.walkNorthwestImages = walkNorthwestImages;
-	}
-
-	public Projectile getProjectile() {
-		return projectile;
-	}
-	
-	public void setProjectile(Projectile projectile) {
-		this.projectile = projectile;
 	}
 
 }
