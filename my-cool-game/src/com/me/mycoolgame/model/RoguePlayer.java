@@ -1,5 +1,6 @@
 package com.me.mycoolgame.model;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -208,6 +209,12 @@ public class RoguePlayer extends Player {
 	public void shoot(World world) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void loadTextures(TextureAtlas atlas) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

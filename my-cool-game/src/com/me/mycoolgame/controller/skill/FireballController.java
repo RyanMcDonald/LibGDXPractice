@@ -1,8 +1,8 @@
 package com.me.mycoolgame.controller.skill;
 
-import com.me.mycoolgame.model.Skill.State;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.model.skill.Fireball;
+import com.me.mycoolgame.model.skill.Skill.State;
 
 public class FireballController extends SkillController {
 

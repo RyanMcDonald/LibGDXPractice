@@ -2,19 +2,16 @@ package com.me.mycoolgame.view;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.me.mycoolgame.controller.skill.SkillController;
 import com.me.mycoolgame.model.Player;
 import com.me.mycoolgame.model.Player.State;
-import com.me.mycoolgame.model.Skill;
+import com.me.mycoolgame.model.skill.Skill;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.util.Assets;
 
@@ -31,23 +28,6 @@ public class WorldRenderer {
 	Music backgroundMusic;
 	
 	private TextureAtlas atlas;
-	private TextureRegion playerIdleNorth;
-	private TextureRegion playerIdleNortheast;
-	private TextureRegion playerIdleEast;
-	private TextureRegion playerIdleSoutheast;
-	private TextureRegion playerIdleSouth;
-	private TextureRegion playerIdleSouthwest;
-	private TextureRegion playerIdleWest;
-	private TextureRegion playerIdleNorthwest;
-	
-	private Animation walkNorthAnimation;
-	private Animation walkNortheastAnimation;
-	private Animation walkEastAnimation;
-	private Animation walkSoutheastAnimation;
-	private Animation walkSouthAnimation;
-	private Animation walkSouthwestAnimation;
-	private Animation walkWestAnimation;
-	private Animation walkNorthwestAnimation;
 	
 	public WorldRenderer(World world, SpriteBatch spriteBatch) {
 		this.world = world;
@@ -102,74 +82,7 @@ public class WorldRenderer {
 		world.setMap(map);
 		renderer = new OrthogonalTiledMapRenderer(map, 1f);
 		
-		playerIdleNorth = atlas.findRegion(player.getIdleNorthImage());
-		playerIdleNortheast = atlas.findRegion(player.getIdleNortheastImage());
-		playerIdleEast = atlas.findRegion(player.getIdleEastImage());
-		playerIdleSoutheast = atlas.findRegion(player.getIdleSoutheastImage());
-		playerIdleSouth = atlas.findRegion(player.getIdleSouthImage());
-		playerIdleSouthwest = atlas.findRegion(player.getIdleSouthwestImage());
-		playerIdleWest = atlas.findRegion(player.getIdleWestImage());
-		playerIdleNorthwest = atlas.findRegion(player.getIdleNorthwestImage());
-
-		Array<String> walkNorthImages = player.getWalkNorthImages();
-		Array<String> walkNortheastImages = player.getWalkNortheastImages();
-		Array<String> walkEastImages = player.getWalkEastImages();
-		Array<String> walkSoutheastImages = player.getWalkSoutheastImages();
-		Array<String> walkSouthImages = player.getWalkSouthImages();
-		Array<String> walkSouthwestImages = player.getWalkSouthwestImages();
-		Array<String> walkWestImages = player.getWalkWestImages();
-		Array<String> walkNorthwestImages = player.getWalkNorthwestImages();
-		
-		TextureRegion[] walkNorthFrames = new TextureRegion[walkNorthImages.size];
-		TextureRegion[] walkNortheastFrames = new TextureRegion[walkNortheastImages.size];
-		TextureRegion[] walkEastFrames = new TextureRegion[walkEastImages.size];
-		TextureRegion[] walkSoutheastFrames = new TextureRegion[walkSoutheastImages.size];
-		TextureRegion[] walkSouthFrames = new TextureRegion[walkSouthImages.size];
-		TextureRegion[] walkSouthwestFrames = new TextureRegion[walkSouthwestImages.size];
-		TextureRegion[] walkWestFrames = new TextureRegion[walkWestImages.size];
-		TextureRegion[] walkNorthwestFrames = new TextureRegion[walkNorthwestImages.size];
-		
-		for (int i = 0; i < walkNorthImages.size; i++) {
-			walkNorthFrames[i] = atlas.findRegion(walkNorthImages.get(i));
-		}
-
-		for (int i = 0; i < walkNortheastImages.size; i++) {
-			walkNortheastFrames[i] = atlas.findRegion(walkNortheastImages.get(i));
-		}
-
-		for (int i = 0; i < walkEastImages.size; i++) {
-			walkEastFrames[i] = atlas.findRegion(walkEastImages.get(i));
-		}
-
-		for (int i = 0; i < walkSoutheastImages.size; i++) {
-			walkSoutheastFrames[i] = atlas.findRegion(walkSoutheastImages.get(i));
-		}
-
-		for (int i = 0; i < walkSouthImages.size; i++) {
-			walkSouthFrames[i] = atlas.findRegion(walkSouthImages.get(i));
-		}
-
-		for (int i = 0; i < walkSouthwestImages.size; i++) {
-			walkSouthwestFrames[i] = atlas.findRegion(walkSouthwestImages.get(i));
-		}
-
-		for (int i = 0; i < walkWestImages.size; i++) {
-			walkWestFrames[i] = atlas.findRegion(walkWestImages.get(i));
-		}
-
-		for (int i = 0; i < walkNorthwestImages.size; i++) {
-			walkNorthwestFrames[i] = atlas.findRegion(walkNorthwestImages.get(i));
-		}
-		
-		float walkingFrameDuration = world.getPlayer().getSpeed() / 800;
-		walkNorthAnimation = new Animation(walkingFrameDuration, walkNorthFrames);
-		walkNortheastAnimation = new Animation(walkingFrameDuration, walkNortheastFrames);
-		walkEastAnimation = new Animation(walkingFrameDuration, walkEastFrames);
-		walkSoutheastAnimation = new Animation(walkingFrameDuration, walkSoutheastFrames);
-		walkSouthAnimation = new Animation(walkingFrameDuration, walkSouthFrames);
-		walkSouthwestAnimation = new Animation(walkingFrameDuration, walkSouthwestFrames);
-		walkWestAnimation = new Animation(walkingFrameDuration, walkWestFrames);
-		walkNorthwestAnimation = new Animation(walkingFrameDuration, walkNorthwestFrames);
+		player.loadTextures(atlas);
 	}
 
 	private void renderPlayer() {
@@ -178,55 +91,55 @@ public class WorldRenderer {
 		if (player.getState().equals(State.IDLE)) {
 			switch (player.getFacingDirection()) {
 			case NORTH:
-				playerFrame = playerIdleNorth;
+				playerFrame = player.getIdleNorthTextureRegion();
 				break;
 			case NORTHEAST:
-				playerFrame = playerIdleNortheast;
+				playerFrame = player.getIdleNortheastTextureRegion();
 				break;
 			case EAST:
-				playerFrame = playerIdleEast;
+				playerFrame = player.getIdleEastTextureRegion();
 				break;
 			case SOUTHEAST:
-				playerFrame = playerIdleSoutheast;
+				playerFrame = player.getIdleSoutheastTextureRegion();
 				break;
 			case SOUTH:
-				playerFrame = playerIdleSouth;
+				playerFrame = player.getIdleSouthTextureRegion();
 				break;
 			case SOUTHWEST:
-				playerFrame = playerIdleSouthwest;
+				playerFrame = player.getIdleSouthwestTextureRegion();
 				break;
 			case WEST:
-				playerFrame = playerIdleWest;
+				playerFrame = player.getIdleWestTextureRegion();
 				break;
 			case NORTHWEST:
-				playerFrame = playerIdleNorthwest;
+				playerFrame = player.getIdleNorthwestTextureRegion();
 				break;
 			}
 		} else if (player.getState().equals(State.WALKING)) {
 			switch (player.getFacingDirection()) {
 			case NORTH:
-				playerFrame = walkNorthAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkNorthAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case NORTHEAST:
-				playerFrame = walkNortheastAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkNortheastAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case EAST:
-				playerFrame = walkEastAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkEastAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case SOUTHEAST:
-				playerFrame = walkSoutheastAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkSoutheastAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case SOUTH:
-				playerFrame = walkSouthAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkSouthAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case SOUTHWEST:
-				playerFrame = walkSouthwestAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkSouthwestAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case WEST:
-				playerFrame = walkWestAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkWestAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			case NORTHWEST:
-				playerFrame = walkNorthwestAnimation.getKeyFrame(player.getStateTime(), true);
+				playerFrame = player.getWalkNorthwestAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			}
 		}
@@ -239,8 +152,12 @@ public class WorldRenderer {
 		for (SkillController controller : player.getSkillControllers()) {
 			Skill skill = controller.getSkill();
 			if (skill.getState() == Skill.State.ACTIVE) {
-				Texture effectTexture = Assets.manager.get(skill.getImage(), Texture.class);
-				spriteBatch.draw(effectTexture, skill.getPosition().x, skill.getPosition().y);
+				// Load the textures if we haven't loaded them already
+				skill.loadTextures(atlas);
+				
+				TextureRegion skillFrame = skill.getActiveAnimation().getKeyFrame(skill.getStateTime(), true);
+				//Texture effectTexture = skillAnimation.getKeyFrame(skill.getStateTime(), true);
+				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
 			}
 		}
 	}

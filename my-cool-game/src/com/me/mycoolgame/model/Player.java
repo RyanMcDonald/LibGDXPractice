@@ -1,9 +1,13 @@
 package com.me.mycoolgame.model;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.mycoolgame.controller.skill.SkillController;
+import com.me.mycoolgame.model.skill.Skill;
 
 public abstract class Player {
 
@@ -15,6 +19,24 @@ public abstract class Player {
 		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 	}
 	
+	private TextureRegion idleNorthTextureRegion;
+	private TextureRegion idleNortheastTextureRegion;
+	private TextureRegion idleEastTextureRegion;
+	private TextureRegion idleSoutheastTextureRegion;
+	private TextureRegion idleSouthTextureRegion;
+	private TextureRegion idleSouthwestTextureRegion;
+	private TextureRegion idleWestTextureRegion;
+	private TextureRegion idleNorthwestTextureRegion;
+
+	private Animation walkNorthAnimation;
+	private Animation walkNortheastAnimation;
+	private Animation walkEastAnimation;
+	private Animation walkSoutheastAnimation;
+	private Animation walkSouthAnimation;
+	private Animation walkSouthwestAnimation;
+	private Animation walkWestAnimation;
+	private Animation walkNorthwestAnimation;
+
 	private float width = 32f;
 	private float height = 32f;
 	
@@ -25,9 +47,10 @@ public abstract class Player {
 	private State state = State.IDLE;
 	private Direction facingDirection = Direction.NORTH;
 	private float stateTime = 0;
-	
+
+	private Array<Skill> skills;
 	private Array<SkillController> skillControllers;
-	
+
 	public Player(Vector2 position) {
 		this.position = position;
 		this.bounds.x = position.x;
@@ -35,6 +58,7 @@ public abstract class Player {
 		this.bounds.width = width;
 		this.bounds.height = height;
 		
+		skills = new Array<Skill>();
 		skillControllers = new Array<SkillController>();
 	}
 
@@ -114,6 +138,14 @@ public abstract class Player {
 		this.stateTime = stateTime;
 	}
 	
+	public Array<Skill> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(Array<Skill> skills) {
+		this.skills = skills;
+	}
+
 	public Array<SkillController> getSkillControllers() {
 		return skillControllers;
 	}
@@ -126,42 +158,140 @@ public abstract class Player {
 		this.stateTime += delta;
 		position.add(velocity.x * delta, velocity.y * delta);
 	}
-	
-	public abstract String getIdleNorthImage();
-	public abstract String getIdleNortheastImage();
-	public abstract String getIdleEastImage();
-	public abstract String getIdleSoutheastImage();
-	public abstract String getIdleSouthImage();
-	public abstract String getIdleSouthwestImage();
-	public abstract String getIdleWestImage();
-	public abstract String getIdleNorthwestImage();
-	
-	public abstract void setIdleNorthImage(String idleNorthImage);
-	public abstract void setIdleNortheastImage(String idleNortheastImage);
-	public abstract void setIdleEastImage(String idleEastImage);
-	public abstract void setIdleSoutheastImage(String idleSoutheastImage);
-	public abstract void setIdleSouthImage(String idleSouthImage);
-	public abstract void setIdleSouthwestImage(String idleSouthwestImage);
-	public abstract void setIdleWestImage(String idleWestImage);
-	public abstract void setIdleNorthwestImage(String idleNorthwestImage);
-	
-	public abstract Array<String> getWalkNorthImages();
-	public abstract Array<String> getWalkNortheastImages();
-	public abstract Array<String> getWalkEastImages();
-	public abstract Array<String> getWalkSoutheastImages();
-	public abstract Array<String> getWalkSouthImages();
-	public abstract Array<String> getWalkSouthwestImages();
-	public abstract Array<String> getWalkWestImages();
-	public abstract Array<String> getWalkNorthwestImages();
 
-	public abstract void setWalkNorthImages(Array<String> walkNorthImages);
-	public abstract void setWalkNortheastImages(Array<String> walkNortheastImages);
-	public abstract void setWalkEastImages(Array<String> walkEastImages);
-	public abstract void setWalkSoutheastImages(Array<String> walkSoutheastImages);
-	public abstract void setWalkSouthImages(Array<String> walkSouthImages);
-	public abstract void setWalkSouthwestImages(Array<String> walkSouthwestImages);
-	public abstract void setWalkWestImages(Array<String> walkWestImages);
-	public abstract void setWalkNorthwestImages(Array<String> walkNorthwestImages);
+	public TextureRegion getIdleNorthTextureRegion() {
+		return idleNorthTextureRegion;
+	}
+
+	public void setIdleNorthTextureRegion(TextureRegion idleNorthTextureRegion) {
+		this.idleNorthTextureRegion = idleNorthTextureRegion;
+	}
+
+	public TextureRegion getIdleNortheastTextureRegion() {
+		return idleNortheastTextureRegion;
+	}
+
+	public void setIdleNortheastTextureRegion(
+			TextureRegion idleNortheastTextureRegion) {
+		this.idleNortheastTextureRegion = idleNortheastTextureRegion;
+	}
+
+	public TextureRegion getIdleEastTextureRegion() {
+		return idleEastTextureRegion;
+	}
+
+	public void setIdleEastTextureRegion(TextureRegion idleEastTextureRegion) {
+		this.idleEastTextureRegion = idleEastTextureRegion;
+	}
+
+	public TextureRegion getIdleSoutheastTextureRegion() {
+		return idleSoutheastTextureRegion;
+	}
+
+	public void setIdleSoutheastTextureRegion(
+			TextureRegion idleSoutheastTextureRegion) {
+		this.idleSoutheastTextureRegion = idleSoutheastTextureRegion;
+	}
+
+	public TextureRegion getIdleSouthTextureRegion() {
+		return idleSouthTextureRegion;
+	}
+
+	public void setIdleSouthTextureRegion(TextureRegion idleSouthTextureRegion) {
+		this.idleSouthTextureRegion = idleSouthTextureRegion;
+	}
+
+	public TextureRegion getIdleSouthwestTextureRegion() {
+		return idleSouthwestTextureRegion;
+	}
+
+	public void setIdleSouthwestTextureRegion(
+			TextureRegion idleSouthwestTextureRegion) {
+		this.idleSouthwestTextureRegion = idleSouthwestTextureRegion;
+	}
+
+	public TextureRegion getIdleWestTextureRegion() {
+		return idleWestTextureRegion;
+	}
+
+	public void setIdleWestTextureRegion(TextureRegion idleWestTextureRegion) {
+		this.idleWestTextureRegion = idleWestTextureRegion;
+	}
+
+	public TextureRegion getIdleNorthwestTextureRegion() {
+		return idleNorthwestTextureRegion;
+	}
+
+	public void setIdleNorthwestTextureRegion(
+			TextureRegion idleNorthwestTextureRegion) {
+		this.idleNorthwestTextureRegion = idleNorthwestTextureRegion;
+	}
+	
+	public Animation getWalkNorthAnimation() {
+		return walkNorthAnimation;
+	}
+
+	public void setWalkNorthAnimation(Animation walkNorthAnimation) {
+		this.walkNorthAnimation = walkNorthAnimation;
+	}
+
+	public Animation getWalkNortheastAnimation() {
+		return walkNortheastAnimation;
+	}
+
+	public void setWalkNortheastAnimation(Animation walkNortheastAnimation) {
+		this.walkNortheastAnimation = walkNortheastAnimation;
+	}
+
+	public Animation getWalkEastAnimation() {
+		return walkEastAnimation;
+	}
+
+	public void setWalkEastAnimation(Animation walkEastAnimation) {
+		this.walkEastAnimation = walkEastAnimation;
+	}
+
+	public Animation getWalkSoutheastAnimation() {
+		return walkSoutheastAnimation;
+	}
+
+	public void setWalkSoutheastAnimation(Animation walkSoutheastAnimation) {
+		this.walkSoutheastAnimation = walkSoutheastAnimation;
+	}
+
+	public Animation getWalkSouthAnimation() {
+		return walkSouthAnimation;
+	}
+
+	public void setWalkSouthAnimation(Animation walkSouthAnimation) {
+		this.walkSouthAnimation = walkSouthAnimation;
+	}
+
+	public Animation getWalkSouthwestAnimation() {
+		return walkSouthwestAnimation;
+	}
+
+	public void setWalkSouthwestAnimation(Animation walkSouthwestAnimation) {
+		this.walkSouthwestAnimation = walkSouthwestAnimation;
+	}
+
+	public Animation getWalkWestAnimation() {
+		return walkWestAnimation;
+	}
+
+	public void setWalkWestAnimation(Animation walkWestAnimation) {
+		this.walkWestAnimation = walkWestAnimation;
+	}
+
+	public Animation getWalkNorthwestAnimation() {
+		return walkNorthwestAnimation;
+	}
+
+	public void setWalkNorthwestAnimation(Animation walkNorthwestAnimation) {
+		this.walkNorthwestAnimation = walkNorthwestAnimation;
+	}
+
+	public abstract void loadTextures(TextureAtlas atlas);
 	
 	public abstract void shoot(World world);
 	

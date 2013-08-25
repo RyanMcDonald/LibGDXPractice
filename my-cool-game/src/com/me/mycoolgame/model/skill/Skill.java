@@ -1,10 +1,12 @@
-package com.me.mycoolgame.model;
+package com.me.mycoolgame.model.skill;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Skill {
-	
+
 	public enum State {
 		READY, ACTIVE, DONE
 	}
@@ -19,7 +21,9 @@ public abstract class Skill {
 	private State state;
 	private float stateTime = 0;
 	
-	private String image;
+	private Animation activeAnimation;
+
+	private Boolean texturesLoaded = false;
 	
 	public Skill(Vector2 position) {
 		this.position = position;
@@ -102,13 +106,28 @@ public abstract class Skill {
 	public void setStateTime(float stateTime) {
 		this.stateTime = stateTime;
 	}
-	
-	public String getImage() {
-		return image;
+
+	public Animation getActiveAnimation() {
+		return activeAnimation;
+	}
+
+	public void setActiveAnimation(Animation animation) {
+		this.activeAnimation = animation;
 	}
 	
-	public void setImage(String image) {
-		this.image = image;
+	public Boolean getTexturesLoaded() {
+		return texturesLoaded;
 	}
+
+	public void setTexturesLoaded(Boolean texturesLoaded) {
+		this.texturesLoaded = texturesLoaded;
+	}
+
+	/**
+	 * Loads the textures for the skill by grabbing the images from the atlas and setting up the
+	 * animations. This method will return if the textures have already been loaded.
+	 * @param atlas
+	 */
+	public abstract void loadTextures(TextureAtlas atlas);
 	
 }
