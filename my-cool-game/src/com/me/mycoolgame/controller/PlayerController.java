@@ -130,12 +130,22 @@ public class PlayerController {
 				playerDirection = Player.Direction.WEST;
 			}
 		}
-		
-		updatePlayerMovingState(playerDirection, Player.State.WALKING, newVelocity);
+
+		// If they're performing an action, they shouldn't be able to do anything else
+		if (player.getState().equals(State.ACTING) && player.getStateTime() < player.getActingTime()) {
+			updatePlayerMovingState(player.getFacingDirection(), Player.State.ACTING, new Vector2(0, 0));
+		} else {
+			updatePlayerMovingState(playerDirection, Player.State.WALKING, newVelocity);
+		}
 	}
 	
 	public void touchpadReleased() {
-		updatePlayerMovingState(player.getFacingDirection(), Player.State.IDLE, new Vector2(0, 0));
+		// If they're performing an action, they shouldn't be able to do anything else
+		if (player.getState().equals(State.ACTING) && player.getStateTime() < player.getActingTime()) {
+			updatePlayerMovingState(player.getFacingDirection(), Player.State.ACTING, new Vector2(0, 0));
+		} else {
+			updatePlayerMovingState(player.getFacingDirection(), Player.State.IDLE, new Vector2(0, 0));
+		}
 	}
 
 	// Process the input and set the player's states
