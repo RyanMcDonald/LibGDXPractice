@@ -15,7 +15,7 @@ import com.me.mycoolgame.model.skill.Skill;
 public abstract class Player {
 
 	public enum State {
-		IDLE, WALKING, DEAD
+		IDLE, WALKING, ACTING, DEAD
 	}
 	
 	public enum Direction {
@@ -41,6 +41,9 @@ public abstract class Player {
 	private Animation walkSouthwestAnimation;
 	private Animation walkWestAnimation;
 	private Animation walkNorthwestAnimation;
+	
+	private Animation actingAnimation;
+	private float actingTime = 0.5f;
 
 	private float width = 32f;
 	private float height = 32f;
@@ -124,6 +127,11 @@ public abstract class Player {
 	}
 
 	public void setState(State state) {
+		// If we changed states, reset the stateTime
+		if (!this.state.equals(state)) {
+			stateTime = 0;
+		}
+		
 		this.state = state;
 	}
 	
@@ -294,6 +302,22 @@ public abstract class Player {
 
 	public void setWalkNorthwestAnimation(Animation walkNorthwestAnimation) {
 		this.walkNorthwestAnimation = walkNorthwestAnimation;
+	}
+
+	public Animation getActingAnimation() {
+		return actingAnimation;
+	}
+
+	public void setActingAnimation(Animation actingAnimation) {
+		this.actingAnimation = actingAnimation;
+	}
+
+	public float getActingTime() {
+		return actingTime;
+	}
+
+	public void setActingTime(float actingTime) {
+		this.actingTime = actingTime;
 	}
 
 	public abstract void loadTextures(TextureAtlas atlas);

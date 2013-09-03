@@ -142,10 +142,11 @@ public class WorldRenderer {
 				playerFrame = player.getWalkNorthwestAnimation().getKeyFrame(player.getStateTime(), true);
 				break;
 			}
+		} else if (player.getState().equals(State.ACTING)) {
+			playerFrame = player.getActingAnimation().getKeyFrame(player.getStateTime(), true);
 		}
 
 		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
-		
 	}
 	
 	private void renderPlayerSkills() {

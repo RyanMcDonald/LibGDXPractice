@@ -42,7 +42,7 @@ public class MagePlayer extends Player {
 			FireballController controller = new FireballController(world, fireball);
 			getSkillControllers().add(controller);
 
-			// They shot the fireball, now set the cooldown
+			// They shot the fireball, now set the cooldown and activate the player casting animation
 			getCooldowns().put(Fireball.NAME, fireball.getCooldown());
 		}
 	}
@@ -148,6 +148,20 @@ public class MagePlayer extends Player {
 		setWalkSouthwestAnimation(new Animation(walkingFrameDuration, walkSouthwestFrames));
 		setWalkWestAnimation(new Animation(walkingFrameDuration, walkWestFrames));
 		setWalkNorthwestAnimation(new Animation(walkingFrameDuration, walkNorthwestFrames));
+		
+		// Acting animation
+		TextureRegion[] actingFrames = new TextureRegion[8];
+		actingFrames[0] = getIdleNorthTextureRegion();
+		actingFrames[1] = getIdleNortheastTextureRegion();
+		actingFrames[2] = getIdleEastTextureRegion();
+		actingFrames[3] = getIdleSoutheastTextureRegion();
+		actingFrames[4] = getIdleSouthTextureRegion();
+		actingFrames[5] = getIdleSouthwestTextureRegion();
+		actingFrames[6] = getIdleWestTextureRegion();
+		actingFrames[7] = getIdleNorthwestTextureRegion();
+		
+		float actingFrameDuration = getSpeed() / 2000;
+		setActingAnimation(new Animation(actingFrameDuration, actingFrames));
 	}
 
 }

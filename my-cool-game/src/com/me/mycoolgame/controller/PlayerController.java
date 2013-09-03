@@ -85,11 +85,13 @@ public class PlayerController {
 	}
 	
 	public void shootPressed() {
+		player.setState(State.ACTING);
 		// Pass in the World so that we can create a controller for the skill
 		player.shoot(world);
 	}
 	
 	public void shootReleased() {
+		
 	}
 	
 	public void touchpadPressed(Touchpad touchpad) {
@@ -143,7 +145,6 @@ public class PlayerController {
 		}
 
 		if (player.getState().equals(Player.State.WALKING)) {
-//			checkCollisionsWithLayer("Foreground", delta);
 			checkCollisionsWithObjects(delta);
 			preventOutOfBounds();
 		}
@@ -160,8 +161,12 @@ public class PlayerController {
 	 * @param delta
 	 */
 	private void processKeyInput(float delta) {
+		// If they're performing an action, they shouldn't be able to do anything else
+		if (player.getState().equals(State.ACTING) && player.getStateTime() < player.getActingTime()) {
+			updatePlayerMovingState(player.getFacingDirection(), Player.State.ACTING, new Vector2(0, 0));
+
 		// If they are only pressing UP
-		if (keys.get(Keys.UP) && !keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
+		} else if (keys.get(Keys.UP) && !keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
 			updatePlayerMovingState(Player.Direction.NORTH, Player.State.WALKING, new Vector2(0, player.getSpeed()));
 			
 		} else if (keys.get(Keys.UP) && keys.get(Keys.RIGHT)) {
