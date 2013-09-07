@@ -152,12 +152,18 @@ public class WorldRenderer {
 	private void renderPlayerSkills() {
 		for (SkillController controller : player.getSkillControllers()) {
 			Skill skill = controller.getSkill();
+			TextureRegion skillFrame = null;
 			if (skill.getState() == Skill.State.ACTIVE) {
 				// Load the textures if we haven't loaded them already
 				skill.loadTextures(atlas);
 				
-				TextureRegion skillFrame = skill.getActiveAnimation().getKeyFrame(skill.getStateTime(), true);
-				//Texture effectTexture = skillAnimation.getKeyFrame(skill.getStateTime(), true);
+				skillFrame = skill.getActiveAnimation().getKeyFrame(skill.getStateTime(), true);
+				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
+			} else if (skill.getState() == Skill.State.COLLIDING) {
+				// Load the textures if we haven't loaded them already
+				skill.loadTextures(atlas);
+				
+				skillFrame = skill.getCollidingAnimation().getKeyFrame(skill.getStateTime(), true);
 				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
 			}
 		}

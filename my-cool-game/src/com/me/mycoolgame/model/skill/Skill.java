@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Skill {
 
 	public enum State {
-		READY, ACTIVE, DONE
+		READY, ACTIVE, DONE, COLLIDING
 	}
 	
 	private float width = 0;
@@ -24,6 +24,7 @@ public abstract class Skill {
 	private Float cooldown;
 	
 	private Animation activeAnimation;
+	private Animation collidingAnimation;
 
 	private Boolean texturesLoaded = false;
 	
@@ -90,6 +91,10 @@ public abstract class Skill {
 	}
 
 	public void setState(State state) {
+		// If we changed states, reset the stateTime
+		if (!this.state.equals(state)) {
+			stateTime = 0;
+		}
 		this.state = state;
 	}
 
@@ -125,6 +130,14 @@ public abstract class Skill {
 		this.activeAnimation = animation;
 	}
 	
+	public Animation getCollidingAnimation() {
+		return collidingAnimation;
+	}
+
+	public void setCollidingAnimation(Animation collidingAnimation) {
+		this.collidingAnimation = collidingAnimation;
+	}
+
 	public Boolean getTexturesLoaded() {
 		return texturesLoaded;
 	}

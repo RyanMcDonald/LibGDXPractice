@@ -85,7 +85,6 @@ public class PlayerController {
 	}
 	
 	public void shootPressed() {
-		player.setState(State.ACTING);
 		// Pass in the World so that we can create a controller for the skill
 		player.shoot(world);
 	}

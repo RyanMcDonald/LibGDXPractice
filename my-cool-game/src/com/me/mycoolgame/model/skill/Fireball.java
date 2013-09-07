@@ -27,7 +27,7 @@ public class Fireball extends Skill {
 		setWidth(32f);
 		setHeight(32f);
 		
-		setCooldown(0f);
+		setCooldown(1f);
 
 		setSpeed(200f);
 
@@ -89,6 +89,20 @@ public class Fireball extends Skill {
 
 		float shootingFrameDuration = getSpeed() / 2000;
 		setActiveAnimation(new Animation(shootingFrameDuration, shootingFrames));
+		
+		Array<String> collidingImages = new Array<String>();
+		collidingImages.add("generic-shooting-1");
+		collidingImages.add("generic-shooting-2");
+		collidingImages.add("generic-shooting-3");
+
+		TextureRegion[] collidingFrames = new TextureRegion[collidingImages.size];
+
+		for (int i = 0; i < collidingImages.size; i++) {
+			collidingFrames[i] = atlas.findRegion(collidingImages.get(i));
+		}
+
+		float collidingFrameDuration = getSpeed() / 2000;
+		setCollidingAnimation(new Animation(collidingFrameDuration, collidingFrames));
 
 		setTexturesLoaded(true);
 	}

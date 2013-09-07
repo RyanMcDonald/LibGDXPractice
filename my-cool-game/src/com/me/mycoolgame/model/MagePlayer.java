@@ -38,6 +38,8 @@ public class MagePlayer extends Player {
 	public void shoot(World world) {
 		// If the skill isn't in the cooldown list, then it's available to use
 		if (getCooldowns().get(Fireball.NAME) == null) {
+			setState(State.ACTING);
+			
 			Fireball fireball = new Fireball(getPosition().cpy(), getFacingDirection());
 			FireballController controller = new FireballController(world, fireball);
 			getSkillControllers().add(controller);

@@ -12,189 +12,210 @@ fireball-shooting-1
   index: -1
 fireball-shooting-2
   rotate: false
-  xy: 35, 1
+  xy: 199, 67
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fireball-shooting-3
   rotate: false
-  xy: 69, 1
+  xy: 35, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fireball-shooting-4
   rotate: false
-  xy: 103, 1
+  xy: 233, 67
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+generic-shooting-1
+  rotate: false
+  xy: 1, 35
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+generic-shooting-2
+  rotate: false
+  xy: 67, 35
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+generic-shooting-3
+  rotate: false
+  xy: 133, 35
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 player-idle-east
   rotate: false
-  xy: 191, 1
+  xy: 96, 1
   size: 24, 32
   orig: 24, 32
   offset: 0, 0
   index: -1
 player-idle-north
   rotate: false
-  xy: 137, 1
+  xy: 69, 1
   size: 25, 32
   orig: 25, 32
   offset: 0, 0
   index: -1
 player-idle-northeast
   rotate: false
-  xy: 378, 2
+  xy: 401, 68
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-idle-northwest
   rotate: false
-  xy: 404, 2
+  xy: 427, 68
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-idle-south
   rotate: false
-  xy: 164, 1
+  xy: 267, 67
   size: 25, 32
   orig: 25, 32
   offset: 0, 0
   index: -1
 player-idle-southeast
   rotate: false
-  xy: 430, 2
+  xy: 453, 68
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-idle-southwest
   rotate: false
-  xy: 456, 2
+  xy: 479, 68
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-idle-west
   rotate: false
-  xy: 217, 1
+  xy: 294, 67
   size: 24, 32
   orig: 24, 32
   offset: 0, 0
   index: -1
 player-walking-east-1
   rotate: false
-  xy: 482, 2
+  xy: 199, 34
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-walking-east-2
   rotate: false
-  xy: 508, 2
+  xy: 225, 34
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-walking-north-1
   rotate: false
-  xy: 243, 2
+  xy: 122, 2
   size: 25, 31
   orig: 25, 31
   offset: 0, 0
   index: -1
 player-walking-north-2
   rotate: false
-  xy: 270, 2
+  xy: 320, 68
   size: 25, 31
   orig: 25, 31
   offset: 0, 0
   index: -1
 player-walking-northeast-1
   rotate: false
-  xy: 586, 3
+  xy: 303, 35
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-northeast-2
   rotate: false
-  xy: 612, 3
+  xy: 329, 36
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-northwest-1
   rotate: false
-  xy: 297, 2
+  xy: 149, 2
   size: 25, 31
   orig: 25, 31
   offset: 0, 0
   index: -1
 player-walking-northwest-2
   rotate: false
-  xy: 638, 3
+  xy: 355, 36
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-south-1
   rotate: false
-  xy: 324, 2
+  xy: 347, 68
   size: 25, 31
   orig: 25, 31
   offset: 0, 0
   index: -1
 player-walking-south-2
   rotate: false
-  xy: 351, 2
+  xy: 374, 68
   size: 25, 31
   orig: 25, 31
   offset: 0, 0
   index: -1
 player-walking-southeast-1
   rotate: false
-  xy: 664, 3
+  xy: 381, 36
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-southeast-2
   rotate: false
-  xy: 690, 3
+  xy: 407, 36
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-southwest-1
   rotate: false
-  xy: 716, 3
+  xy: 433, 36
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-southwest-2
   rotate: false
-  xy: 742, 3
+  xy: 459, 36
   size: 24, 30
   orig: 24, 30
   offset: 0, 0
   index: -1
 player-walking-west-1
   rotate: false
-  xy: 534, 2
+  xy: 251, 34
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
   index: -1
 player-walking-west-2
   rotate: false
-  xy: 560, 2
+  xy: 277, 34
   size: 24, 31
   orig: 24, 31
   offset: 0, 0
