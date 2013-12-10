@@ -206,7 +206,7 @@ public class RoguePlayer extends Player {
 	}
 
 	@Override
-	public void shoot(World world) {
+	public void shootProjectile(World world, Vector2 destination) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,5 +1,6 @@
 package com.me.mycoolgame.controller.skill;
 
+import com.badlogic.gdx.math.Vector2;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.model.skill.Fireball;
 import com.me.mycoolgame.model.skill.Skill.State;
@@ -28,42 +29,19 @@ public class FireballController extends SkillController {
 			fireball.setState(State.DONE);
 		}
 		
-		// Set velocity based on the direction it's shooting
+		// Set velocity so that it shoots towards its destination
 		if (fireball.getState() == State.ACTIVE) {
-			switch (fireball.getShootingDirection()) {
-			case NORTH:
-				fireball.getVelocity().x = 0;
-				fireball.getVelocity().y = fireball.getSpeed();
-				break;
-			case NORTHEAST:
-				fireball.getVelocity().x = fireball.getSpeed();
-				fireball.getVelocity().y = fireball.getSpeed();
-				break;
-			case EAST:
-				fireball.getVelocity().x = fireball.getSpeed();
-				fireball.getVelocity().y = 0;
-				break;
-			case SOUTHEAST:
-				fireball.getVelocity().x = fireball.getSpeed();
-				fireball.getVelocity().y = -fireball.getSpeed();
-				break;
-			case SOUTH:
-				fireball.getVelocity().x = 0;
-				fireball.getVelocity().y = -fireball.getSpeed();
-				break;
-			case SOUTHWEST:
-				fireball.getVelocity().x = -fireball.getSpeed();
-				fireball.getVelocity().y = -fireball.getSpeed();
-				break;
-			case WEST:
-				fireball.getVelocity().x = -fireball.getSpeed();
-				fireball.getVelocity().y = 0;
-				break;
-			case NORTHWEST:
-				fireball.getVelocity().x = -fireball.getSpeed();
-				fireball.getVelocity().y = fireball.getSpeed();
-				break;
+			
+			Vector2 direction = fireball.getDestinationPosition().cpy().sub(fireball.getInitialPosition());
+			
+			// Normalize the vector so we get a vector of length 1 to accurately give us direction
+			// Check that the direction isn't the zero vector, otherwise we would get a divide by zero error.
+			if (!direction.equals(Vector2.Zero)) {
+				direction = direction.nor();
 			}
+			
+			fireball.getVelocity().x = direction.x * fireball.getSpeed();
+			fireball.getVelocity().y = direction.y * fireball.getSpeed();
 		}
 		
 	}

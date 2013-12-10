@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -55,10 +56,6 @@ public class GameScreen implements Screen, InputProcessor {
 			controller.leftPressed();
 		}
 		
-		if (keycode == Keys.F) {
-			controller.shootPressed();
-		}
-		
 		return true;
 	}
 
@@ -80,10 +77,6 @@ public class GameScreen implements Screen, InputProcessor {
 			controller.leftReleased();
 		}
 		
-		if (keycode == Keys.F) {
-			controller.shootReleased();
-		}
-		
 		return true;
 	}
 
@@ -95,13 +88,25 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		controller.shootPressed();
+		// TODO: Ideally, we want the touchDown event to fire the targeting indicator, then when they
+		// release the touch, it will fire the projectile.
+		
+		// TODO: Check which skill is currently set to active
+		
+		// TODO: Enable the appropriate targeting indicator to follow the touch
+		
+		Vector3 coordinates = new Vector3(screenX, screenY, 0);
+		
+		// Convert the window coordinates to game coordinates
+		renderer.getCamera().unproject(coordinates);
+		controller.shootPressed(new Vector2(coordinates.x, coordinates.y));
+		
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		controller.shootReleased();
+		controller.shootReleased(new Vector2(screenX, screenY));
 		return true;
 	}
 

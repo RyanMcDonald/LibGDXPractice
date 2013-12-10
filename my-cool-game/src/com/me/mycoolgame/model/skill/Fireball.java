@@ -16,18 +16,26 @@ public class Fireball extends Skill {
 	// Keep track of the initial position so we know how far the projectile has travelled
 	private Vector2 initialPosition;
 	
+	// The destination that the projectile has to shoot towards
+	private Vector2 destinationPosition;
+	
+	// When the projectile has travelled this many pixels, it stops.
 	private int travelDistancePixels = 200;
 
-	public Fireball(Vector2 position, Direction shootingDirection) {
+	public Fireball(Vector2 position, Vector2 destinationPosition) {
 		super(position);
 
-		this.shootingDirection = shootingDirection;
 		initialPosition = position.cpy();
+		
+		this.destinationPosition = destinationPosition.cpy();
+		
+		// Calculate shooting direction based on initial position and destination position
+		this.shootingDirection = shootingDirection;
 
 		setWidth(32f);
 		setHeight(32f);
 		
-		setCooldown(1f);
+		setCooldown(0.0f);
 
 		setSpeed(200f);
 
@@ -58,6 +66,14 @@ public class Fireball extends Skill {
 
 	public void setInitialPosition(Vector2 initialPosition) {
 		this.initialPosition = initialPosition;
+	}
+
+	public Vector2 getDestinationPosition() {
+		return destinationPosition;
+	}
+
+	public void setDestinationPosition(Vector2 destinationPosition) {
+		this.destinationPosition = destinationPosition;
 	}
 
 	public int getTravelDistancePixels() {

@@ -15,7 +15,7 @@ public class MagePlayer extends Player {
 	public MagePlayer(Vector2 position) {
 		super(position);
 		
-		getSkills().add(new Fireball(getPosition().cpy(), getFacingDirection()));
+		getSkills().add(new Fireball(getPosition().cpy(), getPosition().cpy()));
 	}
 
 	public void update(float delta) {
@@ -35,12 +35,12 @@ public class MagePlayer extends Player {
 		}
 	}
 
-	public void shoot(World world) {
+	public void shootProjectile(World world, Vector2 destinationPosition) {
 		// If the skill isn't in the cooldown list, then it's available to use
 		if (getCooldowns().get(Fireball.NAME) == null) {
 			setState(State.ACTING);
 			
-			Fireball fireball = new Fireball(getPosition().cpy(), getFacingDirection());
+			Fireball fireball = new Fireball(getPosition().cpy(), destinationPosition.cpy());
 			FireballController controller = new FireballController(world, fireball);
 			getSkillControllers().add(controller);
 

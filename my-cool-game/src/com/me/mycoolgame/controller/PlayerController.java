@@ -84,12 +84,12 @@ public class PlayerController {
 		keys.put(Keys.LEFT, false);
 	}
 	
-	public void shootPressed() {
+	public void shootPressed(Vector2 destination) {
 		// Pass in the World so that we can create a controller for the skill
-		player.shoot(world);
+		player.shootProjectile(world, destination);
 	}
 	
-	public void shootReleased() {
+	public void shootReleased(Vector2 destination) {
 		
 	}
 	

@@ -330,6 +330,6 @@ public abstract class Player {
 		this.cooldowns = cooldowns;
 	}
 
-	public abstract void shoot(World world);
+	public abstract void shootProjectile(World world, Vector2 destination);
 	
 }

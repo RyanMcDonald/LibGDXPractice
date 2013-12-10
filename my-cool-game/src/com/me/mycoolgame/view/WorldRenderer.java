@@ -74,6 +74,7 @@ public class WorldRenderer {
 		
 		spriteBatch.end();
 		
+		// TODO: What does this do again?
 		renderer.render(new int[] { 2 });
 	}
 	
@@ -165,6 +166,8 @@ public class WorldRenderer {
 				
 				skillFrame = skill.getCollidingAnimation().getKeyFrame(skill.getStateTime(), true);
 				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
+			} else if (skill.getState() == Skill.State.DONE) {
+				
 			}
 		}
 	}
@@ -197,6 +200,14 @@ public class WorldRenderer {
 		}
 	}
 	
+	public OrthographicCamera getCamera() {
+		return camera;
+	}
+
+	public void setCamera(OrthographicCamera camera) {
+		this.camera = camera;
+	}
+
 	public void dispose() {
 		
 	}
