@@ -11,15 +11,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.me.mycoolgame.controller.skill.SkillController;
 import com.me.mycoolgame.model.skill.Skill;
+import com.me.mycoolgame.util.CardinalDirection.Direction;
 
 public abstract class Player {
 
 	public enum State {
 		IDLE, WALKING, ACTING, DEAD
-	}
-	
-	public enum Direction {
-		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 	}
 	
 	private Map<String, Float> cooldowns = new HashMap<String, Float>();

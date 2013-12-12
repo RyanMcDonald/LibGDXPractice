@@ -44,6 +44,9 @@ public class MagePlayer extends Player {
 			FireballController controller = new FireballController(world, fireball);
 			getSkillControllers().add(controller);
 
+			// Set the player's direction to the direction he shot
+			setFacingDirection(fireball.getShootingDirection());
+			
 			// They shot the fireball, now set the cooldown and activate the player casting animation
 			getCooldowns().put(Fireball.NAME, fireball.getCooldown());
 		}

@@ -5,13 +5,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.me.mycoolgame.model.Player.Direction;
+import com.me.mycoolgame.util.CardinalDirection;
+import com.me.mycoolgame.util.CardinalDirection.Direction;
 
+/**
+ * The Mage's Fireball skill. Explodes upon impact.
+ * Skill type: Projectile.
+ * @author Ryan
+ *
+ */
 public class Fireball extends Skill {
-
+	
 	public static final String NAME = "fireball";
-
-	private Direction shootingDirection = Direction.NORTH;
 
 	// Keep track of the initial position so we know how far the projectile has travelled
 	private Vector2 initialPosition;
@@ -19,18 +24,32 @@ public class Fireball extends Skill {
 	// The destination that the projectile has to shoot towards
 	private Vector2 destinationPosition;
 	
+	// The direction vector representing the exact direction the projectile is headed
+	private Vector2 directionVector;
+	
+	// The cardinal direction, which determines which textures to display for the projectile animation
+	private Direction shootingDirection = Direction.NORTH;
+	
 	// When the projectile has travelled this many pixels, it stops.
 	private int travelDistancePixels = 200;
 
 	public Fireball(Vector2 position, Vector2 destinationPosition) {
 		super(position);
 
-		initialPosition = position.cpy();
+		this.initialPosition = position.cpy();
 		
 		this.destinationPosition = destinationPosition.cpy();
 		
+		this.directionVector = destinationPosition.cpy().sub(initialPosition);
+		
+		// Normalize the direction vector so we get a vector of length 1 to accurately give us direction.
+		// Check that the direction isn't the zero vector, otherwise we would get a divide by zero error.
+		if (!directionVector.equals(Vector2.Zero)) {
+			directionVector = directionVector.nor();
+		}
+		
 		// Calculate shooting direction based on initial position and destination position
-		this.shootingDirection = shootingDirection;
+		this.shootingDirection = CardinalDirection.calculateCardinalDirection(directionVector);
 
 		setWidth(32f);
 		setHeight(32f);
@@ -76,6 +95,14 @@ public class Fireball extends Skill {
 		this.destinationPosition = destinationPosition;
 	}
 
+	public Vector2 getDirectionVector() {
+		return directionVector;
+	}
+
+	public void setDirectionVector(Vector2 directionVector) {
+		this.directionVector = directionVector;
+	}
+
 	public int getTravelDistancePixels() {
 		return travelDistancePixels;
 	}
@@ -91,6 +118,7 @@ public class Fireball extends Skill {
 			return;
 		}
 
+		// The animation that display while the projectile is shooting mid-air
 		Array<String> shootingImages = new Array<String>();
 		shootingImages.add("fireball-shooting-1");
 		shootingImages.add("fireball-shooting-2");
@@ -106,6 +134,7 @@ public class Fireball extends Skill {
 		float shootingFrameDuration = getSpeed() / 2000;
 		setActiveAnimation(new Animation(shootingFrameDuration, shootingFrames));
 		
+		// The animation that displays while the projectile is colliding with an object
 		Array<String> collidingImages = new Array<String>();
 		collidingImages.add("generic-shooting-1");
 		collidingImages.add("generic-shooting-2");

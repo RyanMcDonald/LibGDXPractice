@@ -15,6 +15,12 @@ import com.me.mycoolgame.model.skill.Skill;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.util.Assets;
 
+/**
+ * This class is responsible for positioning the camera, loading all the textures, rendering the "Background",
+ * "Foreground", and "Top" tiles, rendering the player, and rendering all of the player's active skills. 
+ * @author Ryan
+ *
+ */
 public class WorldRenderer {
 	
 	private World world;
@@ -53,16 +59,18 @@ public class WorldRenderer {
 		camera.position.x = playerPosition.x;
 		camera.position.y = playerPosition.y;
 		
+		// Don't let the edges of the camera go off the map
 		keepCameraInBounds();
 		
+		// TODO: What do these lines do again?
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 
 		// set the tile map renderer view based on what the camera sees and render the map
 		renderer.setView(camera);
 		
-		// Render the "Top" layer after the player, so that it overlaps the player, i.e., when they walk behind treetops.
-		renderer.render(new int[] { 0, 1, 3 });
+		// Render the "Background" and "Foreground" layers first
+		renderer.render(new int[] { 0, 1 });
 
 		spriteBatch.enableBlending();
 		spriteBatch.begin();
@@ -74,7 +82,7 @@ public class WorldRenderer {
 		
 		spriteBatch.end();
 		
-		// TODO: What does this do again?
+		// Render the "Top" layer after the other layers, so that it overlaps the player, e.g., when they walk behind treetops.
 		renderer.render(new int[] { 2 });
 	}
 	
@@ -86,6 +94,10 @@ public class WorldRenderer {
 		player.loadTextures(atlas);
 	}
 
+	/**
+	 * Find the state of the player and what direction they are facing, then render the appropriate
+	 * texture.
+	 */
 	private void renderPlayer() {
 		TextureRegion playerFrame = null;
 		
@@ -150,28 +162,40 @@ public class WorldRenderer {
 		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
 	}
 	
+	/**
+	 * 
+	 */
 	private void renderPlayerSkills() {
 		for (SkillController controller : player.getSkillControllers()) {
 			Skill skill = controller.getSkill();
 			TextureRegion skillFrame = null;
+			
+			// We only want to render the skill if it's active
 			if (skill.getState() == Skill.State.ACTIVE) {
 				// Load the textures if we haven't loaded them already
 				skill.loadTextures(atlas);
 				
 				skillFrame = skill.getActiveAnimation().getKeyFrame(skill.getStateTime(), true);
 				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
+				
 			} else if (skill.getState() == Skill.State.COLLIDING) {
 				// Load the textures if we haven't loaded them already
 				skill.loadTextures(atlas);
 				
 				skillFrame = skill.getCollidingAnimation().getKeyFrame(skill.getStateTime(), true);
 				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
-			} else if (skill.getState() == Skill.State.DONE) {
 				
+			} else if (skill.getState() == Skill.State.DONE) {
+				// TODO: If the skill is done, we need to find a way to remove it from the game.
+				// Possibly look up that tutorial where they used a Pool of Rects, for example.
 			}
 		}
 	}
 	
+	/**
+	 * Calculates width and height of the TiledMap, then makes sure the camera's coordinates
+	 * are within those bounds.
+	 */
 	private void keepCameraInBounds() {
 		// Map width = number of tiles on the x-axis * each tile's width in pixels
 		int width = (Integer) renderer.getMap().getProperties().get("width");

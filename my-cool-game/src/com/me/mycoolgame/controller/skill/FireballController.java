@@ -31,17 +31,8 @@ public class FireballController extends SkillController {
 		
 		// Set velocity so that it shoots towards its destination
 		if (fireball.getState() == State.ACTIVE) {
-			
-			Vector2 direction = fireball.getDestinationPosition().cpy().sub(fireball.getInitialPosition());
-			
-			// Normalize the vector so we get a vector of length 1 to accurately give us direction
-			// Check that the direction isn't the zero vector, otherwise we would get a divide by zero error.
-			if (!direction.equals(Vector2.Zero)) {
-				direction = direction.nor();
-			}
-			
-			fireball.getVelocity().x = direction.x * fireball.getSpeed();
-			fireball.getVelocity().y = direction.y * fireball.getSpeed();
+			fireball.getVelocity().x = fireball.getDirectionVector().x * fireball.getSpeed();
+			fireball.getVelocity().y = fireball.getDirectionVector().y * fireball.getSpeed();
 		}
 		
 	}
