@@ -29,17 +29,20 @@ public abstract class Skill {
 	private Boolean texturesLoaded = false;
 	
 	public Skill(Vector2 position) {
-		this.position = position;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
-		this.bounds.width = width;
-		this.bounds.height = height;
+		setPosition(position);
+		
+		this.bounds.width = getWidth();
+		this.bounds.height = getHeight();
 		
 		this.state = State.READY;
 	}
 
 	public void update(float delta) {
 		this.stateTime += delta;
+
+		// Calculate the new position by multiplying the velocity by the time since the last
+		// frame was updated, then adding it to the current position.
+		setPosition(position.add(velocity.scl(delta)));
 	}
 	
 	public float getWidth() {
@@ -64,10 +67,21 @@ public abstract class Skill {
 		return position;
 	}
 
+	/**
+	 * Sets the position based on the given vector2. We want position to indicate the center of the
+	 * image, so calculate it based on the width and height.
+	 * 
+	 * This method also updates the bounds of the object so it stays current.
+	 * 
+	 * @param position
+	 */
 	public void setPosition(Vector2 position) {
-		this.position = position;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
+		this.position.x = position.x;
+		this.position.y = position.y;
+		
+		// Subtract the width and height from the bounds because the position represents the center of the object
+		this.bounds.x = position.x - (getWidth() / 2);
+		this.bounds.y = position.y - (getHeight() / 2);
 	}
 	
 	public Vector2 getVelocity() {
@@ -104,6 +118,9 @@ public abstract class Skill {
 
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
+		
+		this.position.x = bounds.x + (getWidth() / 2);
+		this.position.y = bounds.y + (getHeight() / 2);
 	}
 
 	public float getStateTime() {

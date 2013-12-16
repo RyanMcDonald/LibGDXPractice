@@ -1,6 +1,5 @@
 package com.me.mycoolgame.controller.skill;
 
-import com.badlogic.gdx.math.Vector2;
 import com.me.mycoolgame.model.World;
 import com.me.mycoolgame.model.skill.Fireball;
 import com.me.mycoolgame.model.skill.Skill.State;
@@ -13,7 +12,6 @@ public class FireballController extends SkillController {
 		super(world, fireball);
 
 		this.fireball = fireball;
-		//setSkill(fireball);
 	}
 	
 	public void update(float delta) {

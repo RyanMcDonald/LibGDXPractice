@@ -99,6 +99,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		// Convert the window coordinates to game coordinates
 		renderer.getCamera().unproject(coordinates);
+		
 		controller.shootPressed(new Vector2(coordinates.x, coordinates.y));
 		
 		return true;

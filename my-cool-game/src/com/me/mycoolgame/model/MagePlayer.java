@@ -41,6 +41,14 @@ public class MagePlayer extends Player {
 			setState(State.ACTING);
 			
 			Fireball fireball = new Fireball(getPosition().cpy(), destinationPosition.cpy());
+			
+			// We want the destination position to be at the center of the fireball, but since
+			// the fireball's position is calculated based on the bottom left corner, calculate
+			// the new destination from that.
+			destinationPosition.x = destinationPosition.x - fireball.getWidth();
+			destinationPosition.y = destinationPosition.y - fireball.getHeight();
+			fireball.setDestinationPosition(destinationPosition.cpy());
+					
 			FireballController controller = new FireballController(world, fireball);
 			getSkillControllers().add(controller);
 

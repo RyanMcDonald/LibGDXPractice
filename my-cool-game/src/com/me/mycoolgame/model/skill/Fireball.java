@@ -34,9 +34,14 @@ public class Fireball extends Skill {
 	private int travelDistancePixels = 200;
 
 	public Fireball(Vector2 position, Vector2 destinationPosition) {
-		super(position);
+		super(position.cpy());
+		
+		setWidth(32f);
+		setHeight(32f);
+		
+		setPosition(position.cpy());
 
-		this.initialPosition = position.cpy();
+		this.initialPosition = getPosition().cpy();
 		
 		this.destinationPosition = destinationPosition.cpy();
 		
@@ -50,9 +55,6 @@ public class Fireball extends Skill {
 		
 		// Calculate shooting direction based on initial position and destination position
 		this.shootingDirection = CardinalDirection.calculateCardinalDirection(directionVector);
-
-		setWidth(32f);
-		setHeight(32f);
 		
 		setCooldown(0.0f);
 
@@ -63,7 +65,6 @@ public class Fireball extends Skill {
 	
 	public void update(float delta) {
 		super.update(delta);
-		getPosition().add(getVelocity().x * delta, getVelocity().y * delta);
 	}
 	
 	private void reset() {

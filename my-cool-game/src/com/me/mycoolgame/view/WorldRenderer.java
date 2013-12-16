@@ -66,7 +66,7 @@ public class WorldRenderer {
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 
-		// set the tile map renderer view based on what the camera sees and render the map
+		// Set the tile map renderer view based on what the camera sees and render the map
 		renderer.setView(camera);
 		
 		// Render the "Background" and "Foreground" layers first
@@ -159,7 +159,7 @@ public class WorldRenderer {
 			playerFrame = player.getActingAnimation().getKeyFrame(player.getStateTime(), true);
 		}
 
-		spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y);
+		spriteBatch.draw(playerFrame, player.getBounds().x, player.getBounds().y);
 	}
 	
 	/**
@@ -176,14 +176,14 @@ public class WorldRenderer {
 				skill.loadTextures(atlas);
 				
 				skillFrame = skill.getActiveAnimation().getKeyFrame(skill.getStateTime(), true);
-				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
+				spriteBatch.draw(skillFrame, skill.getBounds().x, skill.getBounds().y);
 				
 			} else if (skill.getState() == Skill.State.COLLIDING) {
 				// Load the textures if we haven't loaded them already
 				skill.loadTextures(atlas);
 				
 				skillFrame = skill.getCollidingAnimation().getKeyFrame(skill.getStateTime(), true);
-				spriteBatch.draw(skillFrame, skill.getPosition().x, skill.getPosition().y);
+				spriteBatch.draw(skillFrame, skill.getBounds().x, skill.getBounds().y);
 				
 			} else if (skill.getState() == Skill.State.DONE) {
 				// TODO: If the skill is done, we need to find a way to remove it from the game.

@@ -57,11 +57,11 @@ public abstract class Player {
 	private Array<SkillController> skillControllers;
 
 	public Player(Vector2 position) {
-		this.position = position;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
-		this.bounds.width = width;
-		this.bounds.height = height;
+		// setPosition sets the position vector and bounding rect
+		setPosition(position);
+		
+		this.bounds.width = getWidth();
+		this.bounds.height = getHeight();
 		
 		skills = new Array<Skill>();
 		skillControllers = new Array<SkillController>();
@@ -91,8 +91,10 @@ public abstract class Player {
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
+		
+		// Subtract the width and height from the bounds because the position represents the center of the object
+		this.bounds.x = position.x - (getWidth() / 2);
+		this.bounds.y = position.y - (getHeight() / 2);
 	}
 	
 	public Vector2 getVelocity() {
@@ -117,6 +119,9 @@ public abstract class Player {
 
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
+		
+		this.position.x = bounds.x + (getWidth() / 2);
+		this.position.y = bounds.y + (getHeight() / 2);
 	}
 
 	public State getState() {
@@ -166,7 +171,10 @@ public abstract class Player {
 
 	public void update(float delta) {
 		this.stateTime += delta;
-		position.add(velocity.x * delta, velocity.y * delta);
+		
+		// Calculate the new position by multiplying the velocity by the time since the last
+		// frame was updated, then adding it to the current position.
+		setPosition(position.add(velocity.scl(delta)));
 	}
 
 	public TextureRegion getIdleNorthTextureRegion() {

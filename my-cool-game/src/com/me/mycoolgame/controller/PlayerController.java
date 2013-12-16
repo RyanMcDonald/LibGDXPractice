@@ -215,8 +215,8 @@ public class PlayerController {
 	}
 	
 	private void preventOutOfBounds() {
-		float posX = player.getPosition().x;
-		float posY = player.getPosition().y;
+		float posX = player.getBounds().x;
+		float posY = player.getBounds().y;
 		
 		// Map width = number of tiles on the x-axis * each tile's width in pixels
 		int width = (Integer) world.getMap().getProperties().get("width");
@@ -247,7 +247,8 @@ public class PlayerController {
 			newPosY = mapHeight - player.getHeight();
 		}
 
-		player.setPosition(new Vector2(newPosX, newPosY));
+		//player.setPosition(new Vector2(newPosX + player.getWidth(), newPosY + player.getHeight()));
+		player.setBounds(new Rectangle(newPosX, newPosY, player.getWidth(), player.getHeight()));
 	}
 	
 	private void checkCollisionsWithLayer(String layerName, float delta) {
@@ -259,22 +260,22 @@ public class PlayerController {
 		
 		// We want the player's bounding box to only be his lower half, so that the collision looks more realistic since only
 		// his feet won't be able to walk into the collidable area
-		playerRect.set(player.getPosition().x, player.getPosition().y, player.getWidth(), player.getHeight());
+		playerRect.set(player.getBounds().x, player.getBounds().y, player.getWidth(), player.getHeight());
 		
 		int startX, endX, startY, endY;
 		Array<Rectangle> tiles = new Array<Rectangle>();
 		
 		// If they are moving right, check the tiles to the right of the player's bounding box.
 		if (player.getVelocity().x > 0) {
-			startX = endX = (int) (player.getPosition().x + player.getWidth() + player.getVelocity().x);
+			startX = endX = (int) (player.getBounds().x + player.getWidth() + player.getVelocity().x);
 		
 		// Else they are moving left, so check the tiles to the left of their bounding box.
 		} else {
-			startX = endX = (int) (player.getPosition().x + player.getVelocity().x);
+			startX = endX = (int) (player.getBounds().x + player.getVelocity().x);
 		}
 		
-		startY = (int) (player.getPosition().y);
-		endY = (int) (player.getPosition().y + player.getHeight());
+		startY = (int) (player.getBounds().y);
+		endY = (int) (player.getBounds().y + player.getHeight());
 		
 		// Get the possible tiles the player could collide with
 		getTiles(layerName, startX, startY, endX, endY, tiles);
@@ -286,19 +287,19 @@ public class PlayerController {
 				break;
 			}
 		}
-		playerRect.x = player.getPosition().x;
+		playerRect.x = player.getBounds().x;
 		
 		// Repeat for the Y-axis. If they're moving up, check the tiles above their bounding box.
 		if (player.getVelocity().y > 0) {
-			startY = endY = (int) (player.getPosition().y + player.getHeight() + player.getVelocity().y);
+			startY = endY = (int) (player.getBounds().y + player.getHeight() + player.getVelocity().y);
 		
 		// Otherwise they are moving down, so check the tiles on the bottom of their bounding box.
 		} else {
-			startY = endY = (int) (player.getPosition().y + player.getVelocity().y);
+			startY = endY = (int) (player.getBounds().y + player.getVelocity().y);
 		}
 		
-		startX = (int) (player.getPosition().x);
-		endX = (int) (player.getPosition().x + player.getWidth());
+		startX = (int) (player.getBounds().x);
+		endX = (int) (player.getBounds().x + player.getWidth());
 		
 		// Get the possible tiles the player could collide with
 		getTiles(layerName, startX, startY, endX, endY, tiles);
@@ -349,10 +350,10 @@ public class PlayerController {
 		player.getVelocity().scl(delta);
 		
 		Rectangle playerRect = new Rectangle();
-		
+
 		// We want the player's bounding box to only be his lower half, so that the collision looks more realistic since only
 		// his feet won't be able to walk into the collidable area
-		playerRect.set(player.getPosition().x, player.getPosition().y, player.getWidth(), player.getHeight() / 2);
+		playerRect.set(player.getBounds().x, player.getBounds().y, player.getWidth(), player.getHeight() / 2);
 		
 		// TODO: Possibly move this outside of this method so it's not instantiated on every frame
 		MapObjects objects = world.getMap().getLayers().get("Collision").getObjects();
@@ -367,7 +368,7 @@ public class PlayerController {
 			}
 			
 			// Reset the x position of the playerRect so we can use it in the y-axis collision calculation
-			playerRect.x = player.getPosition().x;
+			playerRect.x = player.getBounds().x;
 			
 			// If the player will collide with an object in the next y position calculation, set y velocity to 0.
 			playerRect.y += player.getVelocity().y;
@@ -375,7 +376,7 @@ public class PlayerController {
 				player.getVelocity().y = 0;
 			}
 			
-			playerRect.y = player.getPosition().y;
+			playerRect.y = player.getBounds().y;
 		}
 		
 		// Unscale the velocity by the inverse delta time
