@@ -34,20 +34,20 @@ public class MagePlayer extends Player {
 
 		}
 	}
+	
+	@Override
+	public void useSkill(World world, Vector2 destinationPosition, String skillName) {
+		if (skillName.equals(Fireball.NAME)) {
+			shootFireball(world, destinationPosition);
+		}
+	}
 
-	public void shootProjectile(World world, Vector2 destinationPosition) {
+	private void shootFireball(World world, Vector2 destinationPosition) {
 		// If the skill isn't in the cooldown list, then it's available to use
 		if (getCooldowns().get(Fireball.NAME) == null) {
 			setState(State.ACTING);
 			
 			Fireball fireball = new Fireball(getPosition().cpy(), destinationPosition.cpy());
-			
-			// We want the destination position to be at the center of the fireball, but since
-			// the fireball's position is calculated based on the bottom left corner, calculate
-			// the new destination from that.
-			destinationPosition.x = destinationPosition.x - fireball.getWidth();
-			destinationPosition.y = destinationPosition.y - fireball.getHeight();
-			fireball.setDestinationPosition(destinationPosition.cpy());
 					
 			FireballController controller = new FireballController(world, fireball);
 			getSkillControllers().add(controller);

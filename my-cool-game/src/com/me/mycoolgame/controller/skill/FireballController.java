@@ -7,10 +7,11 @@ import com.me.mycoolgame.model.skill.Skill.State;
 public class FireballController extends SkillController {
 
 	private Fireball fireball;
-	
+		
 	public FireballController(World world, Fireball fireball) {
 		super(world, fireball);
 
+		setSkill(fireball);
 		this.fireball = fireball;
 	}
 	

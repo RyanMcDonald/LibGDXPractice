@@ -335,6 +335,12 @@ public abstract class Player {
 		this.cooldowns = cooldowns;
 	}
 
-	public abstract void shootProjectile(World world, Vector2 destination);
+	/**
+	 * When a player uses a skill.
+	 * @param world The world object so that we can pass it to the skill's controller.
+	 * @param destination The position where the player clicked or targeted.
+	 * @param skillName The name of the skill we want to use.
+	 */
+	public abstract void useSkill(World world, Vector2 destination, String skillName);
 	
 }

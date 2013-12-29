@@ -88,32 +88,39 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO: Ideally, we want the touchDown event to fire the targeting indicator, then when they
-		// release the touch, it will fire the projectile.
-		
-		// TODO: Check which skill is currently set to active
-		
-		// TODO: Enable the appropriate targeting indicator to follow the touch
-		
-		Vector3 coordinates = new Vector3(screenX, screenY, 0);
+		// TODO: Check which button was pressed or which button is set as active. For now, just assume it was button1.
+		String activeButton = "button1";
 		
 		// Convert the window coordinates to game coordinates
+		Vector3 coordinates = new Vector3(screenX, screenY, 0);
 		renderer.getCamera().unproject(coordinates);
 		
-		controller.shootPressed(new Vector2(coordinates.x, coordinates.y));
+		// TODO: Activate the targeting indicator
+		controller.activateSkillTargetIndicator(new Vector2(coordinates.x, coordinates.y), activeButton);
 		
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		controller.shootReleased(new Vector2(screenX, screenY));
+
+		// Convert the window coordinates to game coordinates
+		Vector3 coordinates = new Vector3(screenX, screenY, 0);
+		renderer.getCamera().unproject(coordinates);
+		
+		// TODO: Check which skill is currently set to active (i.e., which hotkey was pressed in the touchDown event)
+		// For now, just assume it was button1.
+		String screenButton = "button1";
+		
+		// Activate the skill where the touch was released
+		controller.activateSkill(new Vector2(coordinates.x, coordinates.y), screenButton);
+		
 		return true;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
+		// TODO Update the position of the targeting indicator
 		return false;
 	}
 

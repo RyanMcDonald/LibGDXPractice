@@ -38,6 +38,9 @@ public class PlayerController {
 		keys.put(Keys.DOWN, false);
 	};
 	
+	// Our hotkey map with button name as the key and skill name as the value
+	private Map<String, String> hotkeys = new HashMap<String, String>();
+	
 	// We use this for optimization to avoid garbage collection overhead. Otherwise we would
 	// have to allocate a rectangle on each frame when checking collisions with a layer.
 	private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
@@ -50,6 +53,8 @@ public class PlayerController {
 	public PlayerController(World world) {
 		this.world = world;
 		this.player = world.getPlayer();
+		
+		setUpHotkeys();
 	}
 	
 	public void upPressed() {
@@ -84,13 +89,20 @@ public class PlayerController {
 		keys.put(Keys.LEFT, false);
 	}
 	
-	public void shootPressed(Vector2 destination) {
+	public void activateSkillTargetIndicator(Vector2 destination, String screenButton) {
 		// Pass in the World so that we can create a controller for the skill
-		player.shootProjectile(world, destination);
+
+		// TODO: Enable the appropriate targeting indicator to follow the touch after a certain delay
+		// player.prepareSkill(world, destination, screenButton);
 	}
 	
-	public void shootReleased(Vector2 destination) {
+	public void activateSkill(Vector2 destination, String screenButton) {
+		// Pass in the World so that we can create a controller for the skill
 		
+		// Get the name of the skill that is bound to that button
+		String skillName = hotkeys.get(screenButton);
+		
+		player.useSkill(world, destination, skillName);
 	}
 	
 	public void touchpadPressed(Touchpad touchpad) {
@@ -247,7 +259,6 @@ public class PlayerController {
 			newPosY = mapHeight - player.getHeight();
 		}
 
-		//player.setPosition(new Vector2(newPosX + player.getWidth(), newPosY + player.getHeight()));
 		player.setBounds(new Rectangle(newPosX, newPosY, player.getWidth(), player.getHeight()));
 	}
 	
@@ -381,6 +392,15 @@ public class PlayerController {
 		
 		// Unscale the velocity by the inverse delta time
 		player.getVelocity().scl(1/delta);
+	}
+	
+	/**
+	 * 
+	 */
+	private void setUpHotkeys() {
+		// TODO: Get their hotkeys from local storage somehow
+		
+		hotkeys.put("button1", "fireball");
 	}
 	
 }

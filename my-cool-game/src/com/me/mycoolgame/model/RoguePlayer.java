@@ -206,15 +206,15 @@ public class RoguePlayer extends Player {
 	}
 
 	@Override
-	public void shootProjectile(World world, Vector2 destination) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void loadTextures(TextureAtlas atlas) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void useSkill(World world, Vector2 destination, String skillName) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
